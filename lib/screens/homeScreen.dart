@@ -22,29 +22,29 @@ class _HomescreenState extends State<Homescreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Display Large Text Example
+              // Large heading - 36px
               Text(
                 'Welcome to ALU Connect',
-                style: AppTheme.displayLargeMobile.copyWith(
+                style: AppTextStyles.displaySm.copyWith(
                   color: AppColors.primary,
                 ),
               ),
               const SizedBox(height: AppTheme.spacingMd),
 
-              // Headline Medium with description
+              // Medium heading - 24px
               Text(
                 'Get Started',
-                style: AppTheme.headlineMedium.copyWith(
-                  color: AppColors.onSurface,
+                style: AppTextStyles.headingMd.copyWith(
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: AppTheme.spacingSm),
 
-              // Body Text Example
+              // Body text - 16px
               Text(
                 'This is a simple example screen showing how to use the theme system. You can see typography, colors, spacing, and components in action.',
-                style: AppTheme.bodyMedium.copyWith(
-                  color: AppColors.onSurfaceVariant,
+                style: AppTextStyles.bodyMd.copyWith(
+                  color: AppColors.textSecondary,
                 ),
               ),
               const SizedBox(height: AppTheme.spacingLg),
@@ -70,7 +70,7 @@ class _HomescreenState extends State<Homescreen> {
                   ),
                   child: Text(
                     'Primary Button',
-                    style: AppTheme.labelLarge.copyWith(
+                    style: AppTextStyles.labelLg.copyWith(
                       color: AppColors.onPrimary,
                     ),
                   ),
@@ -99,7 +99,7 @@ class _HomescreenState extends State<Homescreen> {
                   ),
                   child: Text(
                     'Secondary Button',
-                    style: AppTheme.labelLarge.copyWith(
+                    style: AppTextStyles.labelLg.copyWith(
                       color: AppColors.secondary,
                     ),
                   ),
@@ -123,15 +123,15 @@ class _HomescreenState extends State<Homescreen> {
                   children: [
                     Text(
                       'Card Example',
-                      style: AppTheme.headlineMedium.copyWith(
+                      style: AppTextStyles.headingMd.copyWith(
                         color: AppColors.primary,
                       ),
                     ),
                     const SizedBox(height: AppTheme.spacingSm),
                     Text(
                       'This card uses the theme system for colors, spacing, and border radius.',
-                      style: AppTheme.bodyMedium.copyWith(
-                        color: AppColors.onSurface,
+                      style: AppTextStyles.bodyMd.copyWith(
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ],
@@ -142,32 +142,32 @@ class _HomescreenState extends State<Homescreen> {
               // Text Styles Showcase
               Text(
                 'Typography Examples',
-                style: AppTheme.headlineMedium.copyWith(
-                  color: AppColors.onSurface,
+                style: AppTextStyles.headingMd.copyWith(
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: AppTheme.spacingMd),
 
               Text(
-                'Label Small',
-                style: AppTheme.labelSmall.copyWith(
+                'Label Small - 12px',
+                style: AppTextStyles.labelSm.copyWith(
                   color: AppColors.secondary,
                 ),
               ),
               const SizedBox(height: AppTheme.spacingSm),
 
               Text(
-                'Body Medium',
-                style: AppTheme.bodyMedium.copyWith(
-                  color: AppColors.onSurface,
+                'Body Medium - 16px',
+                style: AppTextStyles.bodyMd.copyWith(
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: AppTheme.spacingSm),
 
               Text(
-                'Body Large',
-                style: AppTheme.bodyLarge.copyWith(
-                  color: AppColors.onSurface,
+                'Body Large - 18px',
+                style: AppTextStyles.bodyLg.copyWith(
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],

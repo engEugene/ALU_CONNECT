@@ -1,76 +1,8 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
+import 'app_text_styles.dart';
 
 class AppTheme {
-  // Text Styles
-  static const TextStyle displayLarge = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 48,
-    fontWeight: FontWeight.w800,
-    height: 56 / 48,
-    letterSpacing: -0.02,
-  );
-
-  static const TextStyle displayLargeMobile = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 36,
-    fontWeight: FontWeight.w800,
-    height: 44 / 36,
-    letterSpacing: -0.02,
-  );
-
-  static const TextStyle headlineLarge = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 32,
-    fontWeight: FontWeight.w700,
-    height: 40 / 32,
-    letterSpacing: -0.01,
-  );
-
-  static const TextStyle headlineLargeMobile = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 24,
-    fontWeight: FontWeight.w700,
-    height: 32 / 24,
-    letterSpacing: -0.01,
-  );
-
-  static const TextStyle headlineMedium = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 24,
-    fontWeight: FontWeight.w600,
-    height: 32 / 24,
-  );
-
-  static const TextStyle bodyLarge = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 18,
-    fontWeight: FontWeight.w400,
-    height: 28 / 18,
-  );
-
-  static const TextStyle bodyMedium = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    height: 24 / 16,
-  );
-
-  static const TextStyle labelLarge = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-    height: 20 / 14,
-    letterSpacing: 0.01,
-  );
-
-  static const TextStyle labelSmall = TextStyle(
-    fontFamily: 'Inter',
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    height: 16 / 12,
-    letterSpacing: 0.02,
-  );
 
   // Spacing constants
   static const double spacingXs = 4;
@@ -95,7 +27,7 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme(
+      colorScheme: const ColorScheme(
          brightness: Brightness.dark,
          primary: AppColors.primary,
          onPrimary: AppColors.onPrimary,
@@ -114,24 +46,24 @@ class AppTheme {
          errorContainer: AppColors.errorContainer,
          onErrorContainer: AppColors.onErrorContainer,
          surface: AppColors.surface,
-         onSurface: AppColors.onSurface,
+         onSurface: AppColors.textPrimary,
          outline: AppColors.outline,
-         outlineVariant: AppColors.outlineVariant,
+         outlineVariant: AppColors.divider,
        ),
       scaffoldBackgroundColor: AppColors.background,
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.surfaceContainerHighest,
-        foregroundColor: AppColors.onSurface,
+        foregroundColor: AppColors.textPrimary,
         elevation: 0,
       ),
-      textTheme: const TextTheme(
-        displayLarge: displayLarge,
-        headlineLarge: headlineLarge,
-        headlineMedium: headlineMedium,
-        bodyLarge: bodyLarge,
-        bodyMedium: bodyMedium,
-        labelLarge: labelLarge,
-        labelSmall: labelSmall,
+      textTheme: TextTheme(
+        displayLarge: AppTextStyles.displayLg,
+        headlineLarge: AppTextStyles.headingXl,
+        headlineMedium: AppTextStyles.headingMd,
+        bodyLarge: AppTextStyles.bodyLg,
+        bodyMedium: AppTextStyles.bodyMd,
+        labelLarge: AppTextStyles.labelLg,
+        labelSmall: AppTextStyles.labelSm,
       ),
     );
   }

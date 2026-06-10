@@ -63,6 +63,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             children: [
               Text('Create Event', style: AppTextStyles.headingLg),
               const SizedBox(height: 14),
+
+              // Event / Opportunity Toggle Selector
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
@@ -78,6 +80,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 ),
               ),
               const SizedBox(height: 18),
+
+              // Image Upload Frame Box
               Container(
                 height: 160,
                 width: double.infinity,
@@ -85,7 +89,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   color: AppColors.surfaceContainer,
                   borderRadius: BorderRadius.circular(AppTheme.radiusLg),
                   border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.35),
+                    color: AppColors.primary.withOpacity(0.35),
                     width: 1.2,
                   ),
                 ),
@@ -99,17 +103,23 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         size: 30,
                       ),
                       SizedBox(height: 10),
-                      Text('Add cover image', style: AppTextStyles.labelLg),
+                      Text(
+                        'Add cover image',
+                        style: AppTextStyles.labelLg.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 18),
+
               _fieldLabel('TITLE'),
               const SizedBox(height: 6),
               _buildField(
                 controller: _titleController,
-                hintText: 'Your post a catchy name',
+                hintText: 'Give your post a catchy name',
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Add a title';
@@ -118,6 +128,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 },
               ),
               const SizedBox(height: 14),
+
               _fieldLabel('DESCRIPTION'),
               const SizedBox(height: 6),
               _buildField(
@@ -132,6 +143,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 },
               ),
               const SizedBox(height: 14),
+
               _fieldLabel('DATE & TIME'),
               const SizedBox(height: 6),
               _buildField(
@@ -146,6 +158,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 },
               ),
               const SizedBox(height: 14),
+
               _fieldLabel('CAMPUS'),
               const SizedBox(height: 6),
               _buildField(
@@ -154,35 +167,62 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 suffixIcon: Icons.location_on_outlined,
               ),
               const SizedBox(height: 14),
+
               _fieldLabel('CATEGORY'),
               const SizedBox(height: 10),
+
+              // Chips wrap with clean formatting and dynamic '+' button integration
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: _categories
-                    .map((category) {
-                      final selected = _category == category;
-                      return ChoiceChip(
-                        label: Text(category),
-                        selected: selected,
-                        onSelected: (_) => setState(() => _category = category),
-                        selectedColor: AppColors.primary,
-                        backgroundColor: AppColors.surfaceContainer,
-                        labelStyle: AppTextStyles.labelSm.copyWith(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  ..._categories.map((category) {
+                    final selected = _category == category;
+                    return ChoiceChip(
+                      label: Text(
+                        category,
+                        style: AppTextStyles.labelSm.copyWith(
                           color: selected
                               ? Colors.white
                               : AppColors.textPrimary,
                         ),
-                        side: BorderSide(
-                          color: selected
-                              ? AppColors.primary
-                              : AppColors.divider,
-                        ),
-                      );
-                    })
-                    .toList(growable: false),
+                      ),
+                      selected: selected,
+                      onSelected: (_) => setState(() => _category = category),
+                      selectedColor: AppColors.primary,
+                      backgroundColor: AppColors.surfaceContainer,
+                      showCheckmark:
+                          false, // Prevents layout snapping/jumping when clicked
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      side: BorderSide(
+                        color: selected ? AppColors.primary : AppColors.divider,
+                      ),
+                    );
+                  }),
+                  // Interactive UI Plus Button
+                  GestureDetector(
+                    onTap: () {
+                      // Custom action to dynamically input or append a new chip tag
+                    },
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: AppColors.surfaceContainer,
+                      child: const Icon(
+                        Icons.add,
+                        size: 16,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
+
+              // Publish Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -203,9 +243,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         ),
       ),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: 2,
+        selectedIndex: 2, // Keeps 'Add' selected cleanly
         onDestinationSelected: (value) {
-          final routes = ['/home', '/explore', '/add', '/profile'];
+          // Fully expanded 5-index route array mapped perfectly to your 5 UI targets
+          final routes = ['/home', '/explore', '/add', '/chats', '/profile'];
           context.go(routes[value]);
         },
         destinations: const [
@@ -220,9 +261,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             label: 'Explore',
           ),
           NavigationDestination(
-            icon: Icon(Icons.add),
-            selectedIcon: Icon(Icons.add),
-            label: 'Add Event',
+            icon: Icon(Icons.add_circle_outline),
+            selectedIcon: Icon(Icons.add_circle),
+            label: 'Add',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.chat_bubble_outline),
+            selectedIcon: Icon(Icons.chat_bubble),
+            label: 'Chats',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),
@@ -275,11 +321,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       controller: controller,
       maxLines: maxLines,
       validator: validator,
+      style: const TextStyle(color: AppColors.textPrimary),
       decoration: InputDecoration(
         hintText: hintText,
+        hintStyle: const TextStyle(color: Colors.white24),
         filled: true,
         fillColor: AppColors.surfaceContainer,
-        suffixIcon: suffixIcon == null ? null : Icon(suffixIcon),
+        suffixIcon: suffixIcon == null
+            ? null
+            : Icon(suffixIcon, color: AppColors.textSecondary),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppTheme.radiusMd),
           borderSide: BorderSide.none,
@@ -289,13 +339,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   }
 
   void _submit() {
-    final valid = _formKey.currentState?.validate() ?? false;
-    if (!valid) {
-      return;
+    if (_formKey.currentState?.validate() ?? false) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Publishing $_activeTab: ${_titleController.text}'),
+        ),
+      );
     }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Event prepared for publishing')),
-    );
   }
 }

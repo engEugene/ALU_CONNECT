@@ -120,7 +120,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: const ['All', 'Events', 'Hackathons', 'Info'].length,
-                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                separatorBuilder: (_, _) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final label = const [
                     'All',
@@ -148,7 +148,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   final item = _communities[index];
                   return _TrendingCommunityCard(data: item);
                 },
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                separatorBuilder: (_, _) => const SizedBox(width: 12),
                 itemCount: _communities.length,
               ),
             ),

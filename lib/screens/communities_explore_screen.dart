@@ -1,5 +1,6 @@
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CommunitiesExploreScreen extends StatelessWidget {
   const CommunitiesExploreScreen({super.key});
@@ -44,25 +45,25 @@ class CommunitiesExploreScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text('Trending Now', style: AppTextStyles.headingLg),
           const SizedBox(height: 12),
-          _featuredCard(),
+          _featuredCard(context),
           const SizedBox(height: 18),
           Text('Discover Communities', style: AppTextStyles.headingLg),
           const SizedBox(height: 12),
-          _communityCard('Debate Society', 'Sharpener your rhetoric and critical thinking', '156 Members'),
+          _communityCard(context, 'Debate Society', 'Sharpener your rhetoric and critical thinking', '156 Members'),
           const SizedBox(height: 12),
-          _communityCard('Arts Guild', 'A space for artists to collaborate', '83 Members'),
+          _communityCard(context, 'Arts Guild', 'A space for artists to collaborate', '83 Members'),
           const SizedBox(height: 12),
-          _communityCard('Sports Council', 'The governing body for varsity sports', '320 Members'),
+          _communityCard(context, 'Sports Council', 'The governing body for varsity sports', '320 Members'),
           const SizedBox(height: 12),
-          _communityCard('Music Ensemble', 'From classical to jazz fusion', '45 Members'),
+          _communityCard(context, 'Music Ensemble', 'From classical to jazz fusion', '45 Members'),
           const SizedBox(height: 12),
-          _communityCard('Finance Club', 'Learn investing, analysis, and planning', '103 Members'),
+          _communityCard(context, 'Finance Club', 'Learn investing, analysis, and planning', '103 Members'),
         ],
       ),
     );
   }
 
-  Widget _featuredCard() {
+  Widget _featuredCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -88,14 +89,17 @@ class CommunitiesExploreScreen extends StatelessWidget {
           const SizedBox(height: 12),
           Align(
             alignment: Alignment.centerRight,
-            child: ElevatedButton(onPressed: () {}, child: const Text('Join Club')),
+            child: ElevatedButton(
+              onPressed: () => context.push('/community-detail'),
+              child: const Text('Join Club'),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _communityCard(String title, String subtitle, String members) {
+  Widget _communityCard(BuildContext context, String title, String subtitle, String members) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -123,7 +127,10 @@ class CommunitiesExploreScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          ElevatedButton(onPressed: () {}, child: const Text('Join')),
+          ElevatedButton(
+            onPressed: () => context.push('/community-detail'),
+            child: const Text('Join'),
+          ),
         ],
       ),
     );

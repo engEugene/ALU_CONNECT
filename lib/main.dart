@@ -1,4 +1,6 @@
+import 'package:alu_connect/models/community_data.dart';
 import 'package:alu_connect/screens/community_detail_screen.dart';
+import 'package:alu_connect/screens/membership_application_screen.dart';
 import 'package:alu_connect/screens/event_details_screen.dart';
 import 'package:alu_connect/screens/discover_screen.dart';
 import 'package:alu_connect/screens/empty_tab_screen.dart';
@@ -34,7 +36,16 @@ class AluConnect extends StatelessWidget {
       GoRoute(
         path: '/community-detail',
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const CommunityDetailScreen(),
+        builder: (context, state) => CommunityDetailScreen(
+          community: state.extra as CommunityData,
+        ),
+      ),
+      GoRoute(
+        path: '/membership-application',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => MembershipApplicationScreen(
+          community: state.extra as CommunityData,
+        ),
       ),
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),

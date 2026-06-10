@@ -3,7 +3,6 @@ import 'package:alu_connect/screens/discover_screen.dart';
 import 'package:alu_connect/screens/communities_explore_screen.dart';
 import 'package:alu_connect/screens/onboarding_screen.dart';
 import 'package:alu_connect/screens/create_event_screen.dart';
-import 'package:alu_connect/screens/profile_screen.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -48,7 +47,9 @@ class AluConnect extends StatelessWidget {
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const ProfileScreen(),
+            builder: (context, state) => const Scaffold(
+              body: Center(child: Text('Profile Screen Placeholder')),
+            ),
           ),
         ],
       ),
@@ -97,8 +98,8 @@ class AppShell extends StatelessWidget {
             label: 'Explore',
           ),
           NavigationDestination(
-            icon: Icon(Icons.add),
-            selectedIcon: Icon(Icons.add),
+            icon: Icon(Icons.add_circle_outline),
+            selectedIcon: Icon(Icons.add_circle),
             label: 'Add Event',
           ),
           NavigationDestination(

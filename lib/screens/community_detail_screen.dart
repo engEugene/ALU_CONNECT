@@ -85,7 +85,52 @@ class CommunityDetailScreen extends StatelessWidget {
         ),
       ],
     ),
-    const SizedBox(height: 500), // placeholder for next sections
+    // About section
+Padding(
+  padding: const EdgeInsets.all(AppTheme.spacingMd),
+  child: Container(
+    padding: const EdgeInsets.all(18),
+    decoration: BoxDecoration(
+      color: AppColors.surfaceContainer,
+      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+      border: Border.all(color: AppColors.divider),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'About the Community',
+          style: AppTextStyles.headingMd.copyWith(color: AppColors.primary),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'Tech Hub Elite is the premier destination for students pursuing excellence in software engineering, data science, and emerging technologies. We bridge the gap between academic theory and industry reality through peer-led workshops, high-stakes hackathons, and exclusive networking events with global tech leaders.',
+          style: AppTextStyles.bodyMd.copyWith(color: AppColors.textPrimary),
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            'Artificial Intelligence',
+            'Web3',
+            'System Architecture',
+            'Open Source',
+          ].map((tag) => Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainerHigh,
+              borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+              border: Border.all(color: AppColors.divider),
+            ),
+            child: Text(tag, style: AppTextStyles.labelSm),
+          )).toList(),
+        ),
+      ],
+    ),
+  ),
+),
+const SizedBox(height: 500), // placeholder for next sections
   ],
 ),
       bottomNavigationBar: NavigationBar(

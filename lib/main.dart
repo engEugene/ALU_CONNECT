@@ -1,8 +1,9 @@
 import 'package:alu_connect/screens/event_details_screen.dart';
 import 'package:alu_connect/screens/discover_screen.dart';
-import 'package:alu_connect/screens/empty_tab_screen.dart';
 import 'package:alu_connect/screens/communities_explore_screen.dart';
 import 'package:alu_connect/screens/onboarding_screen.dart';
+import 'package:alu_connect/screens/create_event_screen.dart';
+import 'package:alu_connect/screens/profile_screen.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -43,15 +44,11 @@ class AluConnect extends StatelessWidget {
           ),
           GoRoute(
             path: '/add',
-            builder: (context, state) => const EmptyTabScreen(title: 'Add Event'),
-          ),
-          GoRoute(
-            path: '/chats',
-            builder: (context, state) => const EmptyTabScreen(title: 'Chats'),
+            builder: (context, state) => const CreateEventScreen(),
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const EmptyTabScreen(title: 'Profile'),
+            builder: (context, state) => const ProfileScreen(),
           ),
         ],
       ),
@@ -74,13 +71,7 @@ class AppShell extends StatelessWidget {
 
   final Widget child;
 
-  static const _tabs = [
-    '/home',
-    '/explore',
-    '/add',
-    '/chats',
-    '/profile',
-  ];
+  static const _tabs = ['/home', '/explore', '/add', '/profile'];
 
   @override
   Widget build(BuildContext context) {
@@ -95,11 +86,26 @@ class AppShell extends StatelessWidget {
           context.go(_tabs[value]);
         },
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.explore_outlined), selectedIcon: Icon(Icons.explore), label: 'Explore'),
-          NavigationDestination(icon: Icon(Icons.add), selectedIcon: Icon(Icons.add), label: 'Add Event'),
-          NavigationDestination(icon: Icon(Icons.chat_bubble_outline), selectedIcon: Icon(Icons.chat_bubble), label: 'Chats'),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.explore_outlined),
+            selectedIcon: Icon(Icons.explore),
+            label: 'Explore',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.add),
+            selectedIcon: Icon(Icons.add),
+            label: 'Add Event',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:alu_connect/theme/app_colors.dart';
 
 class GuestRsvpScreen extends StatelessWidget {
   const GuestRsvpScreen({super.key});
@@ -92,7 +91,11 @@ class GuestRsvpScreen extends StatelessWidget {
                 // Main Header Information
                 const Text(
                   'Future Tech Symposium 2024',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 const Text(
@@ -135,6 +138,7 @@ class GuestRsvpScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
                     ),
                   ],
@@ -162,11 +166,16 @@ class GuestRsvpScreen extends StatelessWidget {
                 // Context Form Text Field block
                 const Text(
                   'Why are you interested in this event?',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 TextField(
                   maxLines: 3,
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText:
                         "Tell the community owner why you'd like to join this session...",
@@ -269,4 +278,14 @@ class GuestRsvpScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+// ==========================================================================
+// LOCAL COLOR PALETTE to resolve conflicts
+// ==========================================================================
+class AppColors {
+  static const Color primary = Color(0xFFC61A3C); // Crimson button color
+  static const Color surface = Color(0xFF141B2E); // Card background container
+  static const Color textSecondary =
+      Colors.white70; // Muted grey/white text labels
 }

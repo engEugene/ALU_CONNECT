@@ -130,8 +130,28 @@ Padding(
     ),
   ),
 ),
-const SizedBox(height: 500), // placeholder for next sections
-  ],
+// Leadership section
+Padding(
+  padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingMd),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text('LEADERSHIP', style: AppTextStyles.labelSm.copyWith(letterSpacing: 1.2)),
+      const SizedBox(height: 12),
+      _leaderCard(
+        name: 'Dr. Julian Vance',
+        role: 'Community Faculty Lead',
+      ),
+      const SizedBox(height: 12),
+      _leaderCard(
+        name: 'Sarah Chen',
+        role: 'Student Chairperson',
+      ),
+    ],
+  ),
+),
+const SizedBox(height: 500), // placeholder for next sections  
+],
 ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: 1,
@@ -147,5 +167,34 @@ const SizedBox(height: 500), // placeholder for next sections
         ],
       ),
     );
+    
   }
+  Widget _leaderCard({required String name, required String role}) {
+  return Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: AppColors.surfaceContainer,
+      borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+      border: Border.all(color: AppColors.divider),
+    ),
+    child: Row(
+      children: [
+        CircleAvatar(
+          radius: 24,
+          backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+          child: const Icon(Icons.person, color: AppColors.primary),
+        ),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(name, style: AppTextStyles.labelLg),
+            const SizedBox(height: 2),
+            Text(role, style: AppTextStyles.caption),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 }

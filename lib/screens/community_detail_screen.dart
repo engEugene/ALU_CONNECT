@@ -150,8 +150,86 @@ Padding(
     ],
   ),
 ),
-const SizedBox(height: 500), // placeholder for next sections  
-],
+// Join card
+Padding(
+  padding: const EdgeInsets.all(AppTheme.spacingMd),
+  child: Container(
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: AppColors.surfaceContainer,
+      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+      border: Border.all(color: AppColors.divider),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Join the Elite', style: AppTextStyles.headingLg),
+        const SizedBox(height: 8),
+        Text(
+          'Membership is application-based to ensure a high-quality collaborative environment.',
+          style: AppTextStyles.bodyMd.copyWith(color: AppColors.textSecondary),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+              ),
+            ),
+            child: const Text('Apply for Membership'),
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
+// Member perks section
+Padding(
+  padding: const EdgeInsets.fromLTRB(
+    AppTheme.spacingMd, 0, AppTheme.spacingMd, AppTheme.spacingMd),
+  child: Container(
+    padding: const EdgeInsets.all(18),
+    decoration: BoxDecoration(
+      color: AppColors.surfaceContainer,
+      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+      border: Border.all(color: AppColors.divider),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainerHigh,
+                borderRadius: BorderRadius.circular(AppTheme.radiusSm),
+              ),
+              child: const Icon(Icons.workspace_premium_outlined,
+                  color: AppColors.primary, size: 18),
+            ),
+            const SizedBox(width: 10),
+            Text('MEMBER PERKS',
+                style: AppTextStyles.labelSm.copyWith(letterSpacing: 1.2)),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _perkItem('24/7 Access to the Private Tech Lab'),
+        const Divider(color: AppColors.divider, height: 24),
+        _perkItem('Priority Invitations to Global Hackathons'),
+        const Divider(color: AppColors.divider, height: 24),
+        _perkItem('Cloud Infrastructure Credits (\$500/yr)'),
+      ],
+    ),
+  ),
+),],
 ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: 1,
@@ -195,6 +273,21 @@ const SizedBox(height: 500), // placeholder for next sections
         ),
       ],
     ),
+  );
+
+  
+}
+Widget _perkItem(String text) {
+  return Row(
+    children: [
+      const Icon(Icons.check_circle_outline,
+          color: AppColors.primary, size: 18),
+      const SizedBox(width: 12),
+      Expanded(
+        child: Text(text,
+            style: AppTextStyles.bodyMd.copyWith(color: AppColors.textPrimary)),
+      ),
+    ],
   );
 }
 }

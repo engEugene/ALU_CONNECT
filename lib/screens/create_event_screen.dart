@@ -1,6 +1,5 @@
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
@@ -64,7 +63,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               Text('Create Event', style: AppTextStyles.headingLg),
               const SizedBox(height: 14),
 
-              // Event / Opportunity Toggle Selector
+              // Event / Opportunity Sliding Toggle Selector
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
@@ -81,7 +80,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               ),
               const SizedBox(height: 18),
 
-              // Image Upload Frame Box
+              // Muted Upload Image Box Container Framework
               Container(
                 height: 160,
                 width: double.infinity,
@@ -98,15 +97,16 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Icons.add_a_photo_outlined,
-                        color: AppColors.primary,
-                        size: 30,
+                        Icons.camera_alt_outlined,
+                        color: AppColors.textSecondary,
+                        size: 28,
                       ),
                       SizedBox(height: 10),
                       Text(
                         'Add cover image',
-                        style: AppTextStyles.labelLg.copyWith(
+                        style: TextStyle(
                           color: AppColors.textSecondary,
+                          fontSize: 13,
                         ),
                       ),
                     ],
@@ -171,7 +171,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               _fieldLabel('CATEGORY'),
               const SizedBox(height: 10),
 
-              // Chips wrap with clean formatting and dynamic '+' button integration
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -182,10 +181,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     return ChoiceChip(
                       label: Text(
                         category,
-                        style: AppTextStyles.labelSm.copyWith(
+                        style: TextStyle(
                           color: selected
                               ? Colors.white
                               : AppColors.textPrimary,
+                          fontSize: 13,
                         ),
                       ),
                       selected: selected,
@@ -193,7 +193,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       selectedColor: AppColors.primary,
                       backgroundColor: AppColors.surfaceContainer,
                       showCheckmark:
-                          false, // Prevents layout snapping/jumping when clicked
+                          false, // Keeps design chip layout width static
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 8,
@@ -203,11 +203,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       ),
                     );
                   }),
-                  // Interactive UI Plus Button
+                  // Add Button configuration token mapping to design layouts
                   GestureDetector(
-                    onTap: () {
-                      // Custom action to dynamically input or append a new chip tag
-                    },
+                    onTap: () {},
                     child: CircleAvatar(
                       radius: 16,
                       backgroundColor: AppColors.surfaceContainer,
@@ -222,7 +220,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Publish Button
+              // Publish Call to Action Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -241,41 +239,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 2, // Keeps 'Add' selected cleanly
-        onDestinationSelected: (value) {
-          // Fully expanded 5-index route array mapped perfectly to your 5 UI targets
-          final routes = ['/home', '/explore', '/add', '/chats', '/profile'];
-          context.go(routes[value]);
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.explore_outlined),
-            selectedIcon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.add_circle_outline),
-            selectedIcon: Icon(Icons.add_circle),
-            label: 'Add',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.chat_bubble_outline),
-            selectedIcon: Icon(Icons.chat_bubble),
-            label: 'Chats',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
       ),
     );
   }

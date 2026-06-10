@@ -28,7 +28,66 @@ class CommunityDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(child: Text('Community Detail — WIP')),
+      body: ListView(
+  children: [
+    // Banner with overlay
+    Stack(
+      children: [
+        Container(
+          height: 220,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(
+                'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        // Dark gradient overlay
+        Container(
+          height: 220,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.transparent, Color(0xCC0b1326)],
+            ),
+          ),
+        ),
+        // Community name + meta pinned to bottom of banner
+        Positioned(
+          bottom: 16,
+          left: 16,
+          right: 16,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Tech Hub Elite',
+                style: AppTextStyles.headingXl.copyWith(color: Colors.white),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  const Icon(Icons.group_outlined, size: 14, color: Colors.white70),
+                  const SizedBox(width: 4),
+                  Text('1,248 Members', style: AppTextStyles.caption.copyWith(color: Colors.white70)),
+                  const SizedBox(width: 12),
+                  const Icon(Icons.verified_outlined, size: 14, color: Colors.white70),
+                  const SizedBox(width: 4),
+                  Text('Academic Society', style: AppTextStyles.caption.copyWith(color: Colors.white70)),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+    const SizedBox(height: 500), // placeholder for next sections
+  ],
+),
       bottomNavigationBar: NavigationBar(
         selectedIndex: 1,
         onDestinationSelected: (value) {

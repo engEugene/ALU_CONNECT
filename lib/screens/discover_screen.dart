@@ -317,39 +317,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               ),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 0,
-        onDestinationSelected: (value) {
-          final routes = ['/home', '/explore', '/add', '/profile'];
-          context.go(routes[value]);
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.explore_outlined),
-            selectedIcon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.add),
-            selectedIcon: Icon(Icons.add),
-            label: 'Add',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
+         ),
+       ),
+     );
+   }
 
   Widget _sectionHeader() {
     return Row(

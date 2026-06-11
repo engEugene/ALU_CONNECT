@@ -89,16 +89,16 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     width: 1.2,
                   ),
                 ),
-                child: const Center(
+                child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.add_a_photo_outlined,
                         color: AppColors.primary,
                         size: 30,
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text('Add cover image', style: AppTextStyles.labelLg),
                     ],
                   ),
@@ -169,14 +169,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         selectedColor: AppColors.primary,
                         backgroundColor: AppColors.surfaceContainer,
                         labelStyle: AppTextStyles.labelSm.copyWith(
-                          color: selected
-                              ? Colors.white
-                              : AppColors.textPrimary,
+                          color: selected ? Colors.white : AppColors.textPrimary,
                         ),
                         side: BorderSide(
-                          color: selected
-                              ? AppColors.primary
-                              : AppColors.divider,
+                          color: selected ? AppColors.primary : AppColors.divider,
                         ),
                       );
                     })
@@ -200,39 +196,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               ),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 2,
-        onDestinationSelected: (value) {
-          final routes = ['/home', '/explore', '/add', '/profile'];
-          context.go(routes[value]);
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.explore_outlined),
-            selectedIcon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.add),
-            selectedIcon: Icon(Icons.add),
-            label: 'Add Event',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
+         ),
+       ),
+     );
+   }
 
   Widget _tabButton(String label) {
     final selected = _activeTab == label;
@@ -290,9 +257,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   void _submit() {
     final valid = _formKey.currentState?.validate() ?? false;
-    if (!valid) {
-      return;
-    }
+    if (!valid) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Event prepared for publishing')),

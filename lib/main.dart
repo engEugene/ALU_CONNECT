@@ -1,12 +1,15 @@
+import 'package:alu_connect/models/community_data.dart';
+import 'package:alu_connect/screens/community_detail_screen.dart';
+import 'package:alu_connect/screens/membership_application_screen.dart';
 import 'package:alu_connect/screens/event_details_screen.dart';
 import 'package:alu_connect/screens/discover_screen.dart';
+import 'package:alu_connect/screens/empty_tab_screen.dart';
 import 'package:alu_connect/screens/communities_explore_screen.dart';
 import 'package:alu_connect/screens/onboarding_screen.dart';
+import 'package:alu_connect/screens/chats_screen.dart';
 import 'package:alu_connect/screens/create_event_screen.dart';
 import 'package:alu_connect/screens/profile_screen.dart';
-import 'package:alu_connect/screens/community_membership_application_screen.dart';
-import 'package:alu_connect/screens/community_management_dashboard_screen.dart';
-import 'package:alu_connect/screens/refined_membership_application_screen.dart';
+import 'package:alu_connect/state/alu_app_state.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -34,6 +37,20 @@ class AluConnect extends StatelessWidget {
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const EventDetailsScreen(),
       ),
+      GoRoute(
+        path: '/community-detail',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => CommunityDetailScreen(
+          community: state.extra as CommunityData,
+        ),
+      ),
+      GoRoute(
+        path: '/membership-application',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => MembershipApplicationScreen(
+          community: state.extra as CommunityData,
+        ),
+      ),
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
@@ -47,11 +64,15 @@ class AluConnect extends StatelessWidget {
           ),
           GoRoute(
             path: '/add',
-            builder: (context, state) => const CreateEventScreen(),
+            builder: (context, state) => const EmptyTabScreen(title: 'Add Event'),
+          ),
+          GoRoute(
+            path: '/chats',
+            builder: (context, state) => const ChatsScreen(),
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const ProfileScreen(),
+            builder: (context, state) => const EmptyTabScreen(title: 'Profile'),
           ),
           GoRoute(
             path: '/membership',
@@ -73,11 +94,14 @@ class AluConnect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: "Alu Connect",
-      theme: AppTheme.darkTheme,
-      routerConfig: _router,
+    return AppStateScope(
+      state: AluAppState(),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: "Alu Connect",
+        theme: AppTheme.darkTheme,
+        routerConfig: _router,
+      ),
     );
   }
 }
@@ -87,7 +111,13 @@ class AppShell extends StatelessWidget {
 
   final Widget child;
 
-  static const _tabs = ['/home', '/explore', '/add', '/profile'];
+  static const _tabs = [
+    '/home',
+    '/explore',
+    '/add',
+    '/chats',
+    '/profile',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -102,26 +132,11 @@ class AppShell extends StatelessWidget {
           context.go(_tabs[value]);
         },
         destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.explore_outlined),
-            selectedIcon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.add),
-            selectedIcon: Icon(Icons.add),
-            label: 'Add Event',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
+          NavigationDestination(icon: Icon(Icons.explore_outlined), selectedIcon: Icon(Icons.explore), label: 'Explore'),
+          NavigationDestination(icon: Icon(Icons.add), selectedIcon: Icon(Icons.add), label: 'Add Event'),
+          NavigationDestination(icon: Icon(Icons.chat_bubble_outline), selectedIcon: Icon(Icons.chat_bubble), label: 'Chats'),
+          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );

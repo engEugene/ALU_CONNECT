@@ -4,6 +4,9 @@ import 'package:alu_connect/screens/communities_explore_screen.dart';
 import 'package:alu_connect/screens/onboarding_screen.dart';
 import 'package:alu_connect/screens/create_event_screen.dart';
 import 'package:alu_connect/screens/profile_screen.dart';
+import 'package:alu_connect/screens/community_membership_application_screen.dart';
+import 'package:alu_connect/screens/community_management_dashboard_screen.dart';
+import 'package:alu_connect/screens/refined_membership_application_screen.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -50,6 +53,19 @@ class AluConnect extends StatelessWidget {
             path: '/profile',
             builder: (context, state) => const ProfileScreen(),
           ),
+          GoRoute(
+            path: '/membership',
+            builder: (context, state) => const CommunityMembershipApplicationScreen(),
+          ),
+
+          GoRoute(
+            path: '/dashboard',
+            builder: (context, state) => const CommunityManagementDashboardScreen(),
+          ),
+          GoRoute(
+            path: '/refined-membership',
+            builder: (context, state) => const RefinedMembershipApplicationScreen(),
+        ),
         ],
       ),
     ],

@@ -63,7 +63,11 @@ class AluConnect extends StatelessWidget {
           ),
           GoRoute(
             path: '/add',
+<<<<<<< HEAD
             builder: (context, state) => const CreateEventScreen(),
+=======
+            builder: (context, state) => const EmptyTabScreen(title: 'Add Event'),
+>>>>>>> 09fbd5f3f727b9d09ee76f1dd5817d9aaef82096
           ),
           GoRoute(
             path: '/chats',
@@ -97,7 +101,17 @@ class AppShell extends StatelessWidget {
 
   final Widget child;
 
+<<<<<<< HEAD
   static const _tabs = ['/home', '/explore', '/add', '/chats', '/profile'];
+=======
+  static const _tabs = [
+    '/home',
+    '/explore',
+    '/add',
+    '/chats',
+    '/profile',
+  ];
+>>>>>>> 09fbd5f3f727b9d09ee76f1dd5817d9aaef82096
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +149,14 @@ class AppShell extends StatelessWidget {
             selectedIcon: Icon(Icons.person),
             label: 'Profile',
           ),
+<<<<<<< HEAD
+=======
+          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
+          NavigationDestination(icon: Icon(Icons.explore_outlined), selectedIcon: Icon(Icons.explore), label: 'Explore'),
+          NavigationDestination(icon: Icon(Icons.add), selectedIcon: Icon(Icons.add), label: 'Add Event'),
+          NavigationDestination(icon: Icon(Icons.chat_bubble_outline), selectedIcon: Icon(Icons.chat_bubble), label: 'Chats'),
+          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
+>>>>>>> 09fbd5f3f727b9d09ee76f1dd5817d9aaef82096
         ],
       ),
     );

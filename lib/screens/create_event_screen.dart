@@ -1,6 +1,8 @@
+import 'package:alu_connect/data/mock_data.dart';
+import 'package:alu_connect/models/community_data.dart';
+import 'package:alu_connect/state/alu_app_state.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
-
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
@@ -18,6 +20,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   String _activeTab = 'Event';
   String _category = 'Workshop';
+  CommunityData? _selectedCommunity;
 
   final List<String> _categories = const [
     'Workshop',
@@ -37,6 +40,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = AppStateScope.of(context);
+    final myCommunities = appState.availableCommunitiesForEvent;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('ALU Connect'),
@@ -49,7 +55,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           const CircleAvatar(
             radius: 14,
             backgroundColor: AppColors.surfaceContainerHigh,
-            child: Icon(Icons.person, size: 16, color: AppColors.textPrimary),
+            child: Icon(Icons.person,
+                size: 16, color: AppColors.textPrimary),
           ),
           const SizedBox(width: 12),
         ],
@@ -61,13 +68,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Create Event', style: AppTextStyles.headingLg),
+              Text('Create Event',
+                  style: AppTextStyles.headingLg),
               const SizedBox(height: 14),
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: AppColors.surfaceContainer,
-                  borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+                  borderRadius:
+                      BorderRadius.circular(AppTheme.radiusFull),
                   border: Border.all(color: AppColors.divider),
                 ),
                 child: Row(
@@ -83,9 +92,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: AppColors.surfaceContainer,
-                  borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+                  borderRadius:
+                      BorderRadius.circular(AppTheme.radiusLg),
                   border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.35),
+                    color: AppColors.primary
+                        .withValues(alpha: 0.35),
                     width: 1.2,
                   ),
                 ),
@@ -99,12 +110,75 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         size: 30,
                       ),
                       const SizedBox(height: 10),
-                      Text('Add cover image', style: AppTextStyles.labelLg),
+                      Text('Add cover image',
+                          style: AppTextStyles.labelLg),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 18),
+              if (myCommunities.isEmpty)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainer,
+                    borderRadius: BorderRadius.circular(
+                        AppTheme.radiusMd),
+                    border: Border.all(color: Colors.orange),
+                  ),
+                  child: Column(
+                    children: [
+                      const Icon(Icons.info_outline,
+                          color: Colors.orange, size: 28),
+                      const SizedBox(height: 8),
+                      Text(
+                        'You need to own a community to create an event',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.bodyMd.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Go to your Profile to create a community first',
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else ...[
+                _fieldLabel('YOUR COMMUNITY'),
+                const SizedBox(height: 6),
+                DropdownButtonFormField<CommunityData>(
+                  value: _selectedCommunity,
+                  isExpanded: true,
+                  menuMaxHeight: 200,
+                  decoration: InputDecoration(
+                    hintText: 'Select your community',
+                    filled: true,
+                    fillColor: AppColors.surfaceContainer,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                          AppTheme.radiusMd),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  items: myCommunities
+                      .map((c) => DropdownMenuItem(
+                            value: c,
+                            child: Text(c.name),
+                          ))
+                      .toList(),
+                  onChanged: (val) => setState(
+                      () => _selectedCommunity = val),
+                  validator: (val) => val == null
+                      ? 'Select a community'
+                      : null,
+                ),
+              ],
+              const SizedBox(height: 14),
               _fieldLabel('TITLE'),
               const SizedBox(height: 6),
               _buildField(
@@ -125,7 +199,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 hintText: 'Tell the community more about this...',
                 maxLines: 4,
                 validator: (value) {
-                  if (value == null || value.trim().length < 12) {
+                  if (value == null ||
+                      value.trim().length < 12) {
                     return 'Describe the event or opportunity';
                   }
                   return null;
@@ -136,7 +211,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               const SizedBox(height: 6),
               _buildField(
                 controller: _dateController,
-                hintText: 'mm/dd/yyyy • --:--',
+                hintText: 'mm/dd/yyyy \u2022 --:--',
                 suffixIcon: Icons.calendar_month_outlined,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -165,14 +240,21 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       return ChoiceChip(
                         label: Text(category),
                         selected: selected,
-                        onSelected: (_) => setState(() => _category = category),
+                        onSelected: (_) => setState(
+                            () => _category = category),
                         selectedColor: AppColors.primary,
-                        backgroundColor: AppColors.surfaceContainer,
-                        labelStyle: AppTextStyles.labelSm.copyWith(
-                          color: selected ? Colors.white : AppColors.textPrimary,
+                        backgroundColor:
+                            AppColors.surfaceContainer,
+                        labelStyle: AppTextStyles.labelSm
+                            .copyWith(
+                          color: selected
+                              ? Colors.white
+                              : AppColors.textPrimary,
                         ),
                         side: BorderSide(
-                          color: selected ? AppColors.primary : AppColors.divider,
+                          color: selected
+                              ? AppColors.primary
+                              : AppColors.divider,
                         ),
                       );
                     })
@@ -182,13 +264,20 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _submit,
+                  onPressed: () {
+                    if (myCommunities.isEmpty) return;
+                    _submit();
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: myCommunities.isEmpty
+                        ? AppColors.surfaceContainerHigh
+                        : AppColors.primary,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
+                      borderRadius:
+                          BorderRadius.circular(28),
                     ),
                   ),
                   child: const Text('Publish'),
@@ -196,10 +285,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               ),
             ],
           ),
-         ),
-       ),
-     );
-   }
+        ),
+      ),
+    );
+  }
 
   Widget _tabButton(String label) {
     final selected = _activeTab == label;
@@ -209,14 +298,19 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+          color: selected
+              ? AppColors.primary
+              : Colors.transparent,
+          borderRadius:
+              BorderRadius.circular(AppTheme.radiusFull),
         ),
         child: Center(
           child: Text(
             label,
             style: AppTextStyles.labelLg.copyWith(
-              color: selected ? Colors.white : AppColors.textSecondary,
+              color: selected
+                  ? Colors.white
+                  : AppColors.textSecondary,
             ),
           ),
         ),
@@ -227,7 +321,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   Widget _fieldLabel(String label) {
     return Text(
       label,
-      style: AppTextStyles.labelSm.copyWith(letterSpacing: 1.2),
+      style: AppTextStyles.labelSm
+          .copyWith(letterSpacing: 1.2),
     );
   }
 
@@ -246,9 +341,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         hintText: hintText,
         filled: true,
         fillColor: AppColors.surfaceContainer,
-        suffixIcon: suffixIcon == null ? null : Icon(suffixIcon),
+        suffixIcon: suffixIcon == null
+            ? null
+            : Icon(suffixIcon),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+          borderRadius:
+              BorderRadius.circular(AppTheme.radiusMd),
           borderSide: BorderSide.none,
         ),
       ),
@@ -258,9 +356,44 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   void _submit() {
     final valid = _formKey.currentState?.validate() ?? false;
     if (!valid) return;
+    if (_selectedCommunity == null) return;
+
+    final now = DateTime.now();
+
+    MockData.events.add(EventData(
+      id: MockData.nextEventId,
+      title: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
+      day: now.day.toString(),
+      month: 'NEXT',
+      time: 'TBD',
+      location: _campusController.text.trim(),
+      category: _category.toUpperCase(),
+      tags: [_category.toUpperCase()],
+      capacity: '50',
+      duration: '2h',
+      entryFee: 'Free',
+      imageUrl:
+          'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800',
+      communityId: _selectedCommunity!.name,
+      communityName: _selectedCommunity!.name,
+      availableSlots: 50,
+      friendsAttending: 0,
+    ));
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Event prepared for publishing')),
+      const SnackBar(
+        content:
+            Text('Event created! Check it on the home screen'),
+      ),
     );
+
+    _titleController.clear();
+    _descriptionController.clear();
+    _dateController.clear();
+    setState(() {
+      _selectedCommunity = null;
+      _category = 'Workshop';
+    });
   }
 }

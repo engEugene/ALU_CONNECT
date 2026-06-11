@@ -9,6 +9,9 @@ import 'package:alu_connect/screens/onboarding_screen.dart';
 import 'package:alu_connect/screens/chats_screen.dart';
 import 'package:alu_connect/screens/create_event_screen.dart';
 import 'package:alu_connect/screens/profile_screen.dart';
+import 'package:alu_connect/screens/community_membership_application_screen.dart';
+import 'package:alu_connect/screens/community_management_dashboard_screen.dart';
+import 'package:alu_connect/screens/refined_membership_application_screen.dart';
 import 'package:alu_connect/state/alu_app_state.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +93,7 @@ class AluConnect extends StatelessWidget {
           GoRoute(
             path: '/refined-membership',
             builder: (context, state) => const RefinedMembershipApplicationScreen(),
-        ),
+          ),
         ],
       ),
     ],

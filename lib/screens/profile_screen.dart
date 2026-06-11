@@ -1,4 +1,5 @@
 import 'package:alu_connect/data/mock_data.dart';
+import 'package:alu_connect/models/community_data.dart';
 import 'package:alu_connect/state/alu_app_state.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,90 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  void _showCreateCommunityDialog() {
+    final nameCtrl = TextEditingController();
+    final aboutCtrl = TextEditingController();
+    final descCtrl = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surfaceContainer,
+        title: const Text('Create a Community'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameCtrl,
+                decoration: const InputDecoration(
+                    labelText: 'Community Name'),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: descCtrl,
+                decoration: const InputDecoration(
+                    labelText: 'Short Description'),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: aboutCtrl,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                    labelText: 'About'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (nameCtrl.text.trim().isEmpty) return;
+              final appState =
+                  AppStateScope.of(context);
+              final newCommunity = CommunityData(
+                name: nameCtrl.text.trim(),
+                members: '1 Member',
+                category: 'Custom',
+                bannerUrl:
+                    'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800',
+                about: aboutCtrl.text.trim().isEmpty
+                    ? descCtrl.text.trim()
+                    : aboutCtrl.text.trim(),
+                tags: ['New'],
+                leaders: [
+                  CommunityLeader(
+                      name: appState.profile.name,
+                      role: 'Founder'),
+                ],
+                joinTitle: 'Join Us',
+                joinDescription: descCtrl.text.trim().isEmpty
+                    ? 'A new community at ALU'
+                    : descCtrl.text.trim(),
+                perks: ['Be part of something new'],
+                specializationLabel: 'YOUR ROLE',
+                specializations: ['Member', 'Other'],
+              );
+              appState.addOwnedCommunity(newCommunity);
+              Navigator.pop(ctx);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                      '${newCommunity.name} created!'),
+                ),
+              );
+            },
+            child: const Text('Create'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = AppStateScope.of(context);
@@ -35,7 +120,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               borderRadius:
                   BorderRadius.circular(AppTheme.radiusLg),
               gradient: const LinearGradient(
-                colors: [Color(0xFF1A2033), Color(0xFF0D1424)],
+                colors: [
+                  Color(0xFF1A2033),
+                  Color(0xFF0D1424)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -46,8 +134,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundColor:
-                      AppColors.primary.withValues(alpha: 0.15),
+                  backgroundColor: AppColors.primary
+                      .withValues(alpha: 0.15),
                   child: Text(
                     MockData.userProfile['initials'] ?? 'A',
                     style: AppTextStyles.headingMd
@@ -146,6 +234,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 )
                 .toList(),
           ),
+          const SizedBox(height: 18),
+          Text('My Communities',
+              style: AppTextStyles.headingLg),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: _showCreateCommunityDialog,
+              icon: const Icon(Icons.add),
+              label: const Text('Create a Community'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(
+                    color: AppColors.primary),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      AppTheme.radiusMd),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          if (appState.ownedCommunities.isEmpty)
+            _emptyState(
+                'You haven\'t created any communities yet')
+          else
+            ...appState.ownedCommunities.map(
+              (c) => Padding(
+                padding:
+                    const EdgeInsets.only(bottom: 10),
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainer,
+                    borderRadius: BorderRadius.circular(
+                        AppTheme.radiusMd),
+                    border:
+                        Border.all(color: AppColors.divider),
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor:
+                            AppColors.primary.withValues(
+                                alpha: 0.15),
+                        child: const Icon(Icons.groups,
+                            color: AppColors.primary),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Text(c.name,
+                                style:
+                                    AppTextStyles.labelLg),
+                            Text(c.members,
+                                style:
+                                    AppTextStyles.caption),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           const SizedBox(height: 18),
           Text('Saved opportunities',
               style: AppTextStyles.headingLg),

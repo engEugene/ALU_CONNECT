@@ -15,10 +15,12 @@ class EventData {
   final String duration;
   final String entryFee;
   final String imageUrl;
-  final int availableSlots;
-  final int friendsAttending;
+  final String communityId;
+  final String communityName;
+  int availableSlots;
+  int friendsAttending;
 
-  const EventData({
+  EventData({
     required this.id,
     required this.title,
     required this.description,
@@ -32,12 +34,15 @@ class EventData {
     required this.duration,
     required this.entryFee,
     required this.imageUrl,
-    required this.availableSlots,
-    required this.friendsAttending,
+    required this.communityId,
+    required this.communityName,
+    this.availableSlots = 0,
+    this.friendsAttending = 0,
   });
 }
 
 class ChatData {
+  final String id;
   final String name;
   final String preview;
   final String time;
@@ -46,8 +51,10 @@ class ChatData {
   final bool isItalic;
   final Color avatarColor;
   final IconData avatarIcon;
+  final String? communityId;
 
   const ChatData({
+    required this.id,
     required this.name,
     required this.preview,
     required this.time,
@@ -56,6 +63,7 @@ class ChatData {
     this.isItalic = false,
     required this.avatarColor,
     required this.avatarIcon,
+    this.communityId,
   });
 }
 
@@ -82,7 +90,7 @@ class MessageData {
 }
 
 class MockData {
-  static const List<EventData> events = [
+  static List<EventData> events = [
     EventData(
       id: '1',
       title: 'Venture Pitch Masterclass',
@@ -99,6 +107,8 @@ class MockData {
       entryFee: 'Free',
       imageUrl:
           'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800',
+      communityId: 'community-1',
+      communityName: 'Tech Hub Elite',
       availableSlots: 45,
       friendsAttending: 12,
     ),
@@ -118,6 +128,8 @@ class MockData {
       entryFee: 'Free',
       imageUrl:
           'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
+      communityId: 'community-2',
+      communityName: 'Debate Society',
       availableSlots: 98,
       friendsAttending: 8,
     ),
@@ -137,6 +149,8 @@ class MockData {
       entryFee: 'Free',
       imageUrl:
           'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800',
+      communityId: 'community-1',
+      communityName: 'Tech Hub Elite',
       availableSlots: 150,
       friendsAttending: 25,
     ),
@@ -156,10 +170,16 @@ class MockData {
       entryFee: 'Free',
       imageUrl:
           'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800',
+      communityId: 'community-1',
+      communityName: 'Tech Hub Elite',
       availableSlots: 45,
       friendsAttending: 12,
     ),
   ];
+
+  static int _nextEventId = 5;
+
+  static String get nextEventId => '${_nextEventId++}';
 
   static List<CommunityData> get communities => [
         Communities.techHubElite,
@@ -170,16 +190,19 @@ class MockData {
         Communities.financeClub,
       ];
 
-  static const List<ChatData> chats = [
-    ChatData(
+  static List<ChatData> chats = [
+    const ChatData(
+      id: 'chat-1',
       name: 'ALU Tech Society',
       preview: "David: Don't forget the hackathon starts in 2 hours!",
       time: '10:24 AM',
       unread: 12,
       avatarColor: Color(0xFF1A2A4A),
       avatarIcon: Icons.computer,
+      communityId: 'community-1',
     ),
-    ChatData(
+    const ChatData(
+      id: 'chat-2',
       name: 'Gala Night Committee',
       preview: 'Sarah sent a photo',
       time: 'Yesterday',
@@ -187,15 +210,18 @@ class MockData {
       isItalic: true,
       avatarColor: Color(0xFF3A1A10),
       avatarIcon: Icons.local_fire_department,
+      communityId: 'community-2',
     ),
-    ChatData(
+    const ChatData(
+      id: 'chat-3',
       name: 'Sarah Chen',
       preview: 'Did you finish the research proposal for Dr. Ndlovu?',
       time: '2:15 PM',
       avatarColor: Color(0xFF4A1A2A),
       avatarIcon: Icons.person,
     ),
-    ChatData(
+    const ChatData(
+      id: 'chat-4',
       name: 'Marcus Tetteh',
       preview:
           'Check out this new internship opportunity I found on LinkedIn!',
@@ -203,7 +229,8 @@ class MockData {
       avatarColor: Color(0xFF1A1A3A),
       avatarIcon: Icons.person,
     ),
-    ChatData(
+    const ChatData(
+      id: 'chat-5',
       name: 'Nia Zuri',
       preview: 'Thanks for the help with the CS lab! You saved my grade.',
       time: 'Sunday',
@@ -260,6 +287,26 @@ class MockData {
     ),
   ];
 
+  static List<String> rsvpedEventIds = ['1'];
+
+  static void toggleRsvp(String eventId) {
+    if (rsvpedEventIds.contains(eventId)) {
+      rsvpedEventIds.remove(eventId);
+      final event = events.firstWhere((e) => e.id == eventId);
+      event.availableSlots++;
+      event.friendsAttending--;
+    } else {
+      rsvpedEventIds.add(eventId);
+      final event = events.firstWhere((e) => e.id == eventId);
+      event.availableSlots--;
+      event.friendsAttending++;
+    }
+  }
+
+  static bool isRsvped(String eventId) {
+    return rsvpedEventIds.contains(eventId);
+  }
+
   static const Map<String, String> userProfile = {
     'name': 'Amara Nwosu',
     'role': 'Student',
@@ -281,5 +328,9 @@ class MockData {
     'Top Contributor',
     'Hackathon Winner',
     'Mentor',
+  ];
+
+  static List<CommunityData> ownedCommunities = [
+    Communities.techHubElite,
   ];
 }

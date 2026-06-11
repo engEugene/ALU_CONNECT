@@ -3,12 +3,20 @@ import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class EventDetailsScreen extends StatelessWidget {
+class EventDetailsScreen extends StatefulWidget {
   final EventData event;
   const EventDetailsScreen({super.key, required this.event});
 
   @override
+  State<EventDetailsScreen> createState() => _EventDetailsScreenState();
+}
+
+class _EventDetailsScreenState extends State<EventDetailsScreen> {
+  @override
   Widget build(BuildContext context) {
+    final event = widget.event;
+    final isRsvped = MockData.isRsvped(event.id);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('ALU CONNECT'),
@@ -29,7 +37,8 @@ class EventDetailsScreen extends StatelessWidget {
           Container(
             height: 220,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+              borderRadius:
+                  BorderRadius.circular(AppTheme.radiusLg),
               image: DecorationImage(
                 image: NetworkImage(event.imageUrl),
                 fit: BoxFit.cover,
@@ -52,11 +61,17 @@ class EventDetailsScreen extends StatelessWidget {
             '${event.month} ${event.day} \u2022 ${event.time} \u2022 ${event.location}',
             style: AppTextStyles.caption,
           ),
+          const SizedBox(height: 4),
+          Text(
+            'Hosted by ${event.communityName}',
+            style: AppTextStyles.caption
+                .copyWith(color: AppColors.primary),
+          ),
           const SizedBox(height: 8),
           Text(
             event.description,
-            style: AppTextStyles.bodyMd
-                .copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.bodyMd.copyWith(
+                color: AppColors.textSecondary),
           ),
           const SizedBox(height: 18),
           Row(
@@ -79,14 +94,16 @@ class EventDetailsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppColors.surfaceContainer,
-              borderRadius: BorderRadius.circular(AppTheme.radiusMd),
+              borderRadius:
+                  BorderRadius.circular(AppTheme.radiusMd),
               border: Border.all(color: AppColors.secondary),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
                   children: [
                     Text('ENTRY FEE',
                         style: AppTextStyles.caption),
@@ -98,8 +115,32 @@ class EventDetailsScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('RSVP NOW'),
+                    onPressed: () {
+                      setState(() {
+                        MockData.toggleRsvp(event.id);
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(isRsvped
+                              ? 'RSVP cancelled'
+                              : 'You RSVPed! See you there!'),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isRsvped
+                          ? AppColors.surfaceContainerHigh
+                          : AppColors.primary,
+                    ),
+                    child: Text(
+                        isRsvped
+                            ? 'CANCEL RSVP'
+                            : 'RSVP NOW',
+                        style: TextStyle(
+                          color: isRsvped
+                              ? AppColors.textSecondary
+                              : Colors.white,
+                        )),
                   ),
                 ),
               ],
@@ -137,11 +178,13 @@ class _Badge extends StatelessWidget {
           const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: AppColors.primary,
-        borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+        borderRadius:
+            BorderRadius.circular(AppTheme.radiusFull),
       ),
       child: Text(
         label,
-        style: AppTextStyles.labelSm.copyWith(color: Colors.white),
+        style:
+            AppTextStyles.labelSm.copyWith(color: Colors.white),
       ),
     );
   }

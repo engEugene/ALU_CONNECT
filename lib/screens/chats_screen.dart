@@ -12,11 +12,34 @@ class ChatsScreen extends StatefulWidget {
 
 class _ChatsScreenState extends State<ChatsScreen> {
   int _filterIndex = 0;
-  final _filters = const ['All Chats', 'Clubs', 'Events', 'Direct'];
+  final _filters = const [
+    'All Chats',
+    'Clubs',
+    'Events',
+    'Direct'
+  ];
+
+  List<ChatData> get _filteredChats {
+    final chats = MockData.chats;
+    switch (_filters[_filterIndex]) {
+      case 'Clubs':
+        return chats
+            .where((c) => c.communityId != null)
+            .toList();
+      case 'Events':
+        return [];
+      case 'Direct':
+        return chats
+            .where((c) => c.communityId == null)
+            .toList();
+      default:
+        return chats;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final chats = MockData.chats;
+    final chats = _filteredChats;
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +47,8 @@ class _ChatsScreenState extends State<ChatsScreen> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.notifications_none),
+            icon:
+                const Icon(Icons.notifications_none),
           ),
         ],
       ),
@@ -32,11 +56,14 @@ class _ChatsScreenState extends State<ChatsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            padding:
+                const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
               children: [
-                Text('Messages', style: AppTextStyles.headingLg),
+                Text('Messages',
+                    style: AppTextStyles.headingLg),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.edit_outlined,
@@ -46,21 +73,25 @@ class _ChatsScreenState extends State<ChatsScreen> {
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: const EdgeInsets.symmetric(
+                horizontal: 16, vertical: 10),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Search chats, groups, or clubs...',
-                prefixIcon: const Icon(Icons.search),
+                hintText:
+                    'Search chats, groups, or clubs...',
+                prefixIcon:
+                    const Icon(Icons.search),
                 filled: true,
-                fillColor: AppColors.surfaceContainer,
+                fillColor:
+                    AppColors.surfaceContainer,
                 border: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(AppTheme.radiusFull),
+                  borderRadius: BorderRadius.circular(
+                      AppTheme.radiusFull),
                   borderSide: BorderSide.none,
                 ),
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 12),
+                    const EdgeInsets.symmetric(
+                        vertical: 12),
               ),
             ),
           ),
@@ -68,15 +99,19 @@ class _ChatsScreenState extends State<ChatsScreen> {
             height: 40,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16),
               itemCount: _filters.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              separatorBuilder: (_, __) =>
+                  const SizedBox(width: 8),
               itemBuilder: (context, i) {
                 final selected = _filterIndex == i;
                 return GestureDetector(
-                  onTap: () => setState(() => _filterIndex = i),
+                  onTap: () => setState(
+                      () => _filterIndex = i),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
+                    duration: const Duration(
+                        milliseconds: 180),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 18, vertical: 8),
                     decoration: BoxDecoration(
@@ -84,11 +119,13 @@ class _ChatsScreenState extends State<ChatsScreen> {
                           ? AppColors.primary
                           : AppColors.surfaceContainer,
                       borderRadius:
-                          BorderRadius.circular(AppTheme.radiusFull),
+                          BorderRadius.circular(
+                              AppTheme.radiusFull),
                     ),
                     child: Text(
                       _filters[i],
-                      style: AppTextStyles.labelSm.copyWith(
+                      style: AppTextStyles.labelSm
+                          .copyWith(
                         color: selected
                             ? Colors.white
                             : AppColors.textPrimary,
@@ -101,11 +138,22 @@ class _ChatsScreenState extends State<ChatsScreen> {
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: ListView.builder(
-              itemCount: chats.length,
-              itemBuilder: (context, i) =>
-                  _ChatTile(chat: chats[i]),
-            ),
+            child: chats.isEmpty
+                ? Center(
+                    child: Text(
+                      'No chats in this category',
+                      style: AppTextStyles.bodyMd
+                          .copyWith(
+                        color:
+                            AppColors.textSecondary,
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: chats.length,
+                    itemBuilder: (context, i) =>
+                        _ChatTile(chat: chats[i]),
+                  ),
           ),
         ],
       ),
@@ -122,12 +170,13 @@ class _ChatTile extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => GroupChatScreen(chatName: chat.name),
+          builder: (_) =>
+              GroupChatScreen(chatName: chat.name),
         ),
       ),
       child: Padding(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: const EdgeInsets.symmetric(
+            horizontal: 16, vertical: 10),
         child: Row(
           children: [
             Stack(
@@ -149,7 +198,9 @@ class _ChatTile extends StatelessWidget {
                         color: AppColors.success,
                         shape: BoxShape.circle,
                         border: Border.all(
-                            color: AppColors.background, width: 2),
+                            color:
+                                AppColors.background,
+                            width: 2),
                       ),
                     ),
                   ),
@@ -158,16 +209,19 @@ class _ChatTile extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment:
                         MainAxisAlignment.spaceBetween,
                     children: [
                       Text(chat.name,
-                          style: AppTextStyles.labelLg),
+                          style:
+                              AppTextStyles.labelLg),
                       Text(chat.time,
-                          style: AppTextStyles.caption),
+                          style:
+                              AppTextStyles.caption),
                     ],
                   ),
                   const SizedBox(height: 3),
@@ -175,13 +229,27 @@ class _ChatTile extends StatelessWidget {
                     chat.preview,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.caption.copyWith(
+                    style:
+                        AppTextStyles.caption.copyWith(
                       fontStyle: chat.isItalic
                           ? FontStyle.italic
                           : FontStyle.normal,
                       color: AppColors.textSecondary,
                     ),
                   ),
+                  if (chat.communityId != null)
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 3),
+                      child: Text(
+                        'Community chat',
+                        style:
+                            AppTextStyles.caption.copyWith(
+                          color: AppColors.primary,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -192,8 +260,8 @@ class _ChatTile extends StatelessWidget {
                     horizontal: 7, vertical: 3),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
-                  borderRadius:
-                      BorderRadius.circular(AppTheme.radiusFull),
+                  borderRadius: BorderRadius.circular(
+                      AppTheme.radiusFull),
                 ),
                 child: Text(
                   '${chat.unread}',

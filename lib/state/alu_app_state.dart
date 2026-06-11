@@ -1,6 +1,6 @@
+import 'package:alu_connect/data/mock_data.dart';
+import 'package:alu_connect/models/community_data.dart';
 import 'package:flutter/material.dart';
-
-// ── Models ──────────────────────────────────────────────────────────────────
 
 class UserProfile {
   const UserProfile({
@@ -46,8 +46,6 @@ class Community {
   final Color color;
 }
 
-// ── Persona ──────────────────────────────────────────────────────────────────
-
 enum Persona {
   student('Student'),
   organizer('Organizer'),
@@ -56,8 +54,6 @@ enum Persona {
   const Persona(this.label);
   final String label;
 }
-
-// ── State ────────────────────────────────────────────────────────────────────
 
 class AluAppState extends ChangeNotifier {
   AluAppState();
@@ -123,13 +119,27 @@ class AluAppState extends ChangeNotifier {
     ),
   ];
 
+  List<CommunityData> ownedCommunities = MockData.ownedCommunities;
+
+  void addOwnedCommunity(CommunityData community) {
+    ownedCommunities.add(community);
+    notifyListeners();
+  }
+
+  bool isEventOwner(String eventId) {
+    final event = MockData.events.firstWhere((e) => e.id == eventId);
+    return ownedCommunities.any((c) => c.name == event.communityName);
+  }
+
+  List<CommunityData> get availableCommunitiesForEvent {
+    return ownedCommunities;
+  }
+
   void setPersona(Persona p) {
     persona = p.label;
     notifyListeners();
   }
 }
-
-// ── InheritedNotifier scope ──────────────────────────────────────────────────
 
 class AppStateScope extends InheritedNotifier<AluAppState> {
   const AppStateScope({

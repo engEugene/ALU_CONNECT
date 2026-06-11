@@ -74,6 +74,19 @@ class AluConnect extends StatelessWidget {
             path: '/profile',
             builder: (context, state) => const EmptyTabScreen(title: 'Profile'),
           ),
+          GoRoute(
+            path: '/membership',
+            builder: (context, state) => const CommunityMembershipApplicationScreen(),
+          ),
+
+          GoRoute(
+            path: '/dashboard',
+            builder: (context, state) => const CommunityManagementDashboardScreen(),
+          ),
+          GoRoute(
+            path: '/refined-membership',
+            builder: (context, state) => const RefinedMembershipApplicationScreen(),
+        ),
         ],
       ),
     ],

@@ -24,6 +24,8 @@ void main() {
 class AluConnect extends StatelessWidget {
   const AluConnect({super.key});
 
+  static final AluAppState _appState = AluAppState();
+
   static final GlobalKey<NavigatorState> _rootNavigatorKey =
       GlobalKey<NavigatorState>();
 
@@ -40,7 +42,20 @@ class AluConnect extends StatelessWidget {
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) {
           final eventId = state.pathParameters['id']!;
-          final event = MockData.events.firstWhere((e) => e.id == eventId);
+          EventData? event;
+          for (final item in AppStateScope.of(context).events) {
+            if (item.id == eventId) {
+              event = item;
+              break;
+            }
+          }
+          if (event == null) {
+            return const Scaffold(
+              body: Center(
+                child: Text('Event not found'),
+              ),
+            );
+          }
           return EventDetailsScreen(event: event);
         },
       ),
@@ -102,7 +117,7 @@ class AluConnect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppStateScope(
-      state: AluAppState(),
+      state: _appState,
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: "Alu Connect",
@@ -141,7 +156,7 @@ class AppShell extends StatelessWidget {
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.explore_outlined), selectedIcon: Icon(Icons.explore), label: 'Explore'),
-          NavigationDestination(icon: Icon(Icons.add), selectedIcon: Icon(Icons.add), label: 'Add Event'),
+          NavigationDestination(icon: Icon(Icons.add), selectedIcon: Icon(Icons.add), label: 'Add'),
           NavigationDestination(icon: Icon(Icons.chat_bubble_outline), selectedIcon: Icon(Icons.chat_bubble), label: 'Chats'),
           NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
         ],

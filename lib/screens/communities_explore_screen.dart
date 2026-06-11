@@ -1,5 +1,5 @@
-import 'package:alu_connect/data/mock_data.dart';
 import 'package:alu_connect/models/community_data.dart';
+import 'package:alu_connect/state/alu_app_state.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -25,20 +25,22 @@ class _CommunitiesExploreScreenState
   ];
 
   List<CommunityData> get _filteredCommunities {
+    final communities = AppStateScope.of(context).communities;
     final query = _search.trim().toLowerCase();
-    return MockData.communities.where((c) {
+    return communities.where((c) {
       final matchesSearch = query.isEmpty ||
           c.name.toLowerCase().contains(query) ||
           c.category.toLowerCase().contains(query) ||
           c.tags.any((t) => t.toLowerCase().contains(query));
       final matchesFilter = _selectedFilter == 'All Clubs' ||
-          c.category == _selectedFilter;
+          c.category.toLowerCase().contains(_selectedFilter.toLowerCase());
       return matchesSearch && matchesFilter;
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
+    final appState = AppStateScope.of(context);
     final communities = _filteredCommunities;
 
     return Scaffold(
@@ -113,7 +115,8 @@ class _CommunitiesExploreScreenState
           else
             ...List.generate(communities.length, (index) {
               final c = communities[index];
-              if (c == MockData.communities[0]) {
+              if (appState.communities.isNotEmpty &&
+                  c == appState.communities[0]) {
                 return const SizedBox.shrink();
               }
               return Padding(
@@ -133,7 +136,19 @@ class _CommunitiesExploreScreenState
   }
 
   Widget _featuredCard(BuildContext context) {
-    final featured = MockData.communities[0];
+    final communities = AppStateScope.of(context).communities;
+    if (communities.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+          border: Border.all(color: AppColors.secondary),
+        ),
+        child: Text('No communities yet', style: AppTextStyles.bodyMd),
+      );
+    }
+    final featured = communities[0];
     return GestureDetector(
       onTap: () => context.push('/community-detail',
           extra: featured),

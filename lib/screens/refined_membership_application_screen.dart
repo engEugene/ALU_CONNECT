@@ -79,7 +79,7 @@ class _RefinedMembershipApplicationScreenState
                 decoration: const InputDecoration(
                   labelText: 'Program',
                 ),
-                value: selectedProgram,
+                initialValue: selectedProgram,
                 items: const [
                   DropdownMenuItem(
                     value: 'Software Engineering',
@@ -107,7 +107,7 @@ class _RefinedMembershipApplicationScreenState
                 decoration: const InputDecoration(
                   labelText: 'Year of Study',
                 ),
-                value: selectedYear,
+                initialValue: selectedYear,
                 items: const [
                   DropdownMenuItem(
                     value: 'Year 1',

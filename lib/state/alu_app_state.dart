@@ -119,16 +119,32 @@ class AluAppState extends ChangeNotifier {
     ),
   ];
 
+  List<CommunityData> communities = MockData.communities;
+  List<EventData> events = MockData.events;
   List<CommunityData> ownedCommunities = MockData.ownedCommunities;
 
   void addOwnedCommunity(CommunityData community) {
+    communities.add(community);
     ownedCommunities.add(community);
     notifyListeners();
   }
 
+  void addEvent(EventData event) {
+    events.add(event);
+    notifyListeners();
+  }
+
   bool isEventOwner(String eventId) {
-    final event = MockData.events.firstWhere((e) => e.id == eventId);
-    return ownedCommunities.any((c) => c.name == event.communityName);
+    EventData? event;
+    for (final item in events) {
+      if (item.id == eventId) {
+        event = item;
+        break;
+      }
+    }
+    if (event == null) return false;
+    final currentEvent = event;
+    return ownedCommunities.any((c) => c.name == currentEvent.communityName);
   }
 
   List<CommunityData> get availableCommunitiesForEvent {

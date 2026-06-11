@@ -1,5 +1,6 @@
 import 'package:alu_connect/data/mock_data.dart';
 import 'package:alu_connect/theme/index.dart';
+import 'package:alu_connect/widgets/mock_network_image.dart';
 import 'package:flutter/material.dart';
 
 class GroupChatScreen extends StatefulWidget {
@@ -285,15 +286,10 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         margin: const EdgeInsets.only(left: 40, bottom: 10),
         width: 200,
         height: 130,
-        decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.circular(AppTheme.radiusMd),
-          image: const DecorationImage(
-            image: NetworkImage(
+        child: MockNetworkImage(
+          imageUrl:
               'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400',
-            ),
-            fit: BoxFit.cover,
-          ),
+          borderRadius: BorderRadius.circular(AppTheme.radiusMd),
         ),
       ),
     );

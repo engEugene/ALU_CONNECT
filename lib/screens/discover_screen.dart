@@ -1,6 +1,8 @@
 import 'package:alu_connect/data/mock_data.dart';
 import 'package:alu_connect/models/community_data.dart';
+import 'package:alu_connect/state/alu_app_state.dart';
 import 'package:alu_connect/theme/index.dart';
+import 'package:alu_connect/widgets/mock_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,10 +16,19 @@ class DiscoverScreen extends StatefulWidget {
 class _DiscoverScreenState extends State<DiscoverScreen> {
   String _search = '';
   String _selectedFilter = 'All';
+  final List<String> _filters = const [
+    'All',
+    'WORKSHOP',
+    'SOCIAL',
+    'ACADEMIC',
+    'TECH',
+    'LEADERSHIP',
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final filteredEvents = MockData.events.where((event) {
+    final appState = AppStateScope.of(context);
+    final filteredEvents = appState.events.where((event) {
       final query = _search.trim().toLowerCase();
       final matchesFilter = _selectedFilter == 'All' ||
           event.category == _selectedFilter;
@@ -70,16 +81,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               height: 36,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: const ['All', 'Events', 'Hackathons', 'Info']
-                    .length,
+                itemCount: _filters.length,
                 separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
-                  final label = const [
-                    'All',
-                    'Events',
-                    'Hackathons',
-                    'Info',
-                  ][index];
+                  final label = _filters[index];
                   final active = _selectedFilter == label;
                   return _FilterChip(
                     label: label,
@@ -94,11 +99,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             _sectionTitle('Trending Communities', 'View all'),
             const SizedBox(height: 12),
             SizedBox(
-              height: 240,
+              height: 256,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  final community = MockData.communities[index];
+                  final community = appState.communities[index];
                   return _TrendingCommunityCard(
                     community: community,
                     onTap: () => context.push(
@@ -108,7 +113,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   );
                 },
                 separatorBuilder: (_, __) => const SizedBox(width: 12),
-                itemCount: 3,
+                itemCount: appState.communities.length < 3
+                    ? appState.communities.length
+                    : 3,
               ),
             ),
             const SizedBox(height: 20),
@@ -142,10 +149,16 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(24),
-                      child: Image.network(
-                        'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=800',
-                        fit: BoxFit.cover,
-                        opacity: const AlwaysStoppedAnimation(0.3),
+                      child: ColorFiltered(
+                        colorFilter: const ColorFilter.mode(
+                          Color.fromRGBO(255, 255, 255, 0.3),
+                          BlendMode.modulate,
+                        ),
+                        child: const MockNetworkImage(
+                          imageUrl:
+                              'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=800',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -378,26 +391,53 @@ class _TrendingCommunityCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+            SizedBox(
               height: 118,
-              decoration: BoxDecoration(
+              child: MockNetworkImage(
+                imageUrl: community.bannerUrl,
                 borderRadius: BorderRadius.circular(18),
-                image: DecorationImage(
-                  image: NetworkImage(community.bannerUrl),
-                  fit: BoxFit.cover,
-                ),
               ),
             ),
             const SizedBox(height: 12),
-            Text(community.name, style: AppTextStyles.labelLg),
+            Text(
+              community.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.labelLg,
+            ),
             const SizedBox(height: 3),
-            Text(community.category, style: AppTextStyles.caption),
-            const SizedBox(height: 10),
+            Text(
+              community.category,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.caption,
+            ),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(community.members, style: AppTextStyles.caption),
-                TextButton(onPressed: onTap, child: const Text('Join')),
+                Expanded(
+                  child: Text(
+                    community.members,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.caption,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  onPressed: onTap,
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    minimumSize: Size.zero,
+                  ),
+                  child: const Text('Join'),
+                ),
               ],
             ),
           ],

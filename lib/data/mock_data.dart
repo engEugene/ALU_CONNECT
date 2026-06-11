@@ -289,16 +289,30 @@ class MockData {
 
   static List<String> rsvpedEventIds = ['1'];
 
+  static EventData? getEventById(String eventId) {
+    for (final event in events) {
+      if (event.id == eventId) {
+        return event;
+      }
+    }
+    return null;
+  }
+
   static void toggleRsvp(String eventId) {
+    final event = getEventById(eventId);
+    if (event == null) return;
+
     if (rsvpedEventIds.contains(eventId)) {
       rsvpedEventIds.remove(eventId);
-      final event = events.firstWhere((e) => e.id == eventId);
       event.availableSlots++;
-      event.friendsAttending--;
+      if (event.friendsAttending > 0) {
+        event.friendsAttending--;
+      }
     } else {
       rsvpedEventIds.add(eventId);
-      final event = events.firstWhere((e) => e.id == eventId);
-      event.availableSlots--;
+      if (event.availableSlots > 0) {
+        event.availableSlots--;
+      }
       event.friendsAttending++;
     }
   }

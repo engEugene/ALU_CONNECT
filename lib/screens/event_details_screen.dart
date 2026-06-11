@@ -1,5 +1,6 @@
 import 'package:alu_connect/data/mock_data.dart';
 import 'package:alu_connect/theme/index.dart';
+import 'package:alu_connect/widgets/mock_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,13 +38,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           Container(
             height: 220,
             decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.circular(AppTheme.radiusLg),
-              image: DecorationImage(
-                image: NetworkImage(event.imageUrl),
-                fit: BoxFit.cover,
-              ),
+              borderRadius: BorderRadius.circular(AppTheme.radiusLg),
               border: Border.all(color: AppColors.divider),
+            ),
+            child: MockNetworkImage(
+              imageUrl: event.imageUrl,
+              borderRadius: BorderRadius.circular(AppTheme.radiusLg),
             ),
           ),
           const SizedBox(height: 20),

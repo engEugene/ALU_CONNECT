@@ -1,5 +1,6 @@
 import 'package:alu_connect/models/community_data.dart';
 import 'package:alu_connect/theme/index.dart';
+import 'package:alu_connect/widgets/mock_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,14 +36,12 @@ class CommunityDetailScreen extends StatelessWidget {
           // Banner with overlay
           Stack(
             children: [
-              Container(
+              SizedBox(
                 height: 220,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(community.bannerUrl),
-                    fit: BoxFit.cover,
-                  ),
+                child: MockNetworkImage(
+                  imageUrl: community.bannerUrl,
+                  width: double.infinity,
                 ),
               ),
               Container(

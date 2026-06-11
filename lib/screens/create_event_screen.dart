@@ -89,7 +89,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     width: 1.2,
                   ),
                 ),
-                child: const Center(
+                child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

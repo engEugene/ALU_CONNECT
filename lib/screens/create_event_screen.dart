@@ -89,16 +89,16 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     width: 1.2,
                   ),
                 ),
-                child: const Center(
+                child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.add_a_photo_outlined,
                         color: AppColors.primary,
                         size: 30,
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text('Add cover image', style: AppTextStyles.labelLg),
                     ],
                   ),
@@ -169,14 +169,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         selectedColor: AppColors.primary,
                         backgroundColor: AppColors.surfaceContainer,
                         labelStyle: AppTextStyles.labelSm.copyWith(
-                          color: selected
-                              ? Colors.white
-                              : AppColors.textPrimary,
+                          color: selected ? Colors.white : AppColors.textPrimary,
                         ),
                         side: BorderSide(
-                          color: selected
-                              ? AppColors.primary
-                              : AppColors.divider,
+                          color: selected ? AppColors.primary : AppColors.divider,
                         ),
                       );
                     })
@@ -290,9 +286,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   void _submit() {
     final valid = _formKey.currentState?.validate() ?? false;
-    if (!valid) {
-      return;
-    }
+    if (!valid) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Event prepared for publishing')),

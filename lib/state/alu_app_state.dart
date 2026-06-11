@@ -63,46 +63,63 @@ class AluAppState extends ChangeNotifier {
   AluAppState();
 
   UserProfile profile = const UserProfile(
-    name: 'Alex Mutesi',
+    name: 'Amara Nwosu',
     role: 'Student',
     campus: 'Kigali Campus',
-    bio: 'Passionate about tech, leadership, and building community.',
+    bio: 'Passionate about tech, entrepreneurship, and building community across Africa.',
     stats: {
-      'Events': '4',
-      'Communities': '3',
-      'RSVPs': '12',
-      'Saved': '7',
+      'Hosted': '12',
+      'Joined': '5',
+      'Tracked': '34',
+      'Saved': '8',
     },
-    badges: ['Early Adopter', 'Event Host', 'Community Builder'],
+    badges: [
+      'Early Adopter',
+      'Event Host',
+      'Top Contributor',
+      'Hackathon Winner',
+      'Mentor',
+    ],
   );
 
   String persona = Persona.student.label;
 
   List<Opportunity> savedOpportunities = const [
     Opportunity(
-      title: 'Data Science Fellowship',
-      organizer: 'Standard Chartered',
-      dateLabel: 'Nov 5',
-      color: Color(0xFF5C6BC0),
+      title: 'Google Summer of Code',
+      organizer: 'Google',
+      dateLabel: 'Jun 15',
+      color: Color(0xFF4285F4),
     ),
     Opportunity(
-      title: 'UX Design Challenge',
-      organizer: 'Adobe Student Community',
-      dateLabel: 'Dec 1',
+      title: 'ALU Hackathon 2026',
+      organizer: 'ALU Tech Club',
+      dateLabel: 'Jul 3',
       color: Color(0xFFE91E63),
+    ),
+    Opportunity(
+      title: 'UN Youth Fellowship',
+      organizer: 'United Nations',
+      dateLabel: 'Aug 1',
+      color: Color(0xFF18D26E),
     ),
   ];
 
   List<Community> joinedCommunities = const [
     Community(
-      name: 'Tech Hub Elite',
-      nextActivity: 'Hackathon prep — Sat 10am',
+      name: 'ALU Tech Club',
+      nextActivity: 'Hackathon prep \u2014 Fri 6pm',
       color: Color(0xFF42A5F5),
     ),
     Community(
-      name: 'Debate Society',
-      nextActivity: 'Practice session — Wed 3pm',
+      name: 'Entrepreneurship Hub',
+      nextActivity: 'Pitch night \u2014 Sat 4pm',
       color: Color(0xFFAB47BC),
+    ),
+    Community(
+      name: 'ALU Debate Society',
+      nextActivity: 'Open session \u2014 Mon 5pm',
+      color: Color(0xFF18D26E),
     ),
   ];
 

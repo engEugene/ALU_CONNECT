@@ -1,9 +1,11 @@
+import 'package:alu_connect/data/mock_data.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class EventDetailsScreen extends StatelessWidget {
-  const EventDetailsScreen({super.key});
+  final EventData event;
+  const EventDetailsScreen({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -15,48 +17,61 @@ class EventDetailsScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.share_outlined)),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.share_outlined),
+          ),
         ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(AppTheme.spacingMd),
         children: [
           Container(
-            height: 320,
+            height: 220,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFF101827), Color(0xFF07111F)],
+              image: DecorationImage(
+                image: NetworkImage(event.imageUrl),
+                fit: BoxFit.cover,
               ),
               border: Border.all(color: AppColors.divider),
-            ),
-            child: const Center(
-              child: Icon(Icons.desktop_windows_outlined, size: 120, color: AppColors.secondary),
             ),
           ),
           const SizedBox(height: 20),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: const [
-              _Badge('WORKSHOP'),
-              _Badge('TECH FOR GOOD'),
-            ],
+            children: event.tags
+                .map((tag) => _Badge(tag))
+                .toList(),
           ),
           const SizedBox(height: 10),
-          Text('AI for Social Impact', style: AppTextStyles.displaySm),
+          Text(event.title, style: AppTextStyles.displaySm),
           const SizedBox(height: 4),
-          Text('Oct 24 • 14:00  •  Innovation Hub', style: AppTextStyles.caption),
+          Text(
+            '${event.month} ${event.day} \u2022 ${event.time} \u2022 ${event.location}',
+            style: AppTextStyles.caption,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            event.description,
+            style: AppTextStyles.bodyMd
+                .copyWith(color: AppColors.textSecondary),
+          ),
           const SizedBox(height: 18),
           Row(
-            children: const [
-              Expanded(child: _StatBox('60', 'CAP')),
-              SizedBox(width: 10),
-              Expanded(child: _StatBox('3h', 'DURATION')),
-              SizedBox(width: 10),
-              Expanded(child: _StatBox('Free', 'ENTRY')),
+            children: [
+              Expanded(
+                child: _StatBox(event.capacity, 'CAP'),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _StatBox(event.duration, 'DURATION'),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _StatBox(event.entryFee, 'ENTRY'),
+              ),
             ],
           ),
           const SizedBox(height: 18),
@@ -73,8 +88,10 @@ class EventDetailsScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('ENTRY FEE', style: AppTextStyles.caption),
-                    Text('Free', style: AppTextStyles.labelLg),
+                    Text('ENTRY FEE',
+                        style: AppTextStyles.caption),
+                    Text(event.entryFee,
+                        style: AppTextStyles.labelLg),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -89,11 +106,20 @@ class EventDetailsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Text('REGISTRATION DETAILS', style: AppTextStyles.labelLg),
+          Text('REGISTRATION DETAILS',
+              style: AppTextStyles.labelLg),
           const SizedBox(height: 10),
-          _detailCard('Available Slots', '45 / 60', 'Registration closes soon'),
+          _detailCard(
+            'Available Slots',
+            '${event.availableSlots} / ${event.capacity}',
+            'Registration closes soon',
+          ),
           const SizedBox(height: 12),
-          _detailCard('Friends attending', '12', 'Join with your network'),
+          _detailCard(
+            'Friends attending',
+            '${event.friendsAttending}',
+            'Join with your network',
+          ),
         ],
       ),
     );
@@ -101,28 +127,30 @@ class EventDetailsScreen extends StatelessWidget {
 }
 
 class _Badge extends StatelessWidget {
-  const _Badge(this.label);
-
   final String label;
+  const _Badge(this.label);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding:
+          const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.circular(AppTheme.radiusFull),
       ),
-      child: Text(label, style: AppTextStyles.labelSm.copyWith(color: Colors.white)),
+      child: Text(
+        label,
+        style: AppTextStyles.labelSm.copyWith(color: Colors.white),
+      ),
     );
   }
 }
 
 class _StatBox extends StatelessWidget {
-  const _StatBox(this.value, this.label);
-
   final String value;
   final String label;
+  const _StatBox(this.value, this.label);
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+import 'package:alu_connect/data/mock_data.dart';
+import 'package:alu_connect/models/community_data.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,69 +15,18 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   String _search = '';
   String _selectedFilter = 'All';
 
-  final List<_CommunityCardData> _communities = const [
-    _CommunityCardData(
-      'ALU Cyber Nexus',
-      'Security, privacy, and digital innovation',
-      '18 TECH',
-      '1.9k members',
-      'Join',
-    ),
-    _CommunityCardData(
-      'ALU Builders',
-      'Projects, product teams, and makers',
-      'BUILD',
-      '1.2k members',
-      'Join',
-    ),
-    _CommunityCardData(
-      'Campus Creators',
-      'Storytelling, design, and media',
-      'MEDIA',
-      '860 members',
-      'Join',
-    ),
-  ];
-
-  final List<_EventCardData> _events = const [
-    _EventCardData(
-      '24',
-      'WORKSHOP',
-      '18:00 - 8:30',
-      'Venture Pitch Masterclass',
-      'Keen your delivery with industry mentors and campus entrepreneurs.',
-    ),
-    _EventCardData(
-      '26',
-      'SOCIAL',
-      '18:30 - 20:00',
-      'Neo Nights Mixer',
-      'Celebrate mid-term completion with your classmates and friends.',
-    ),
-    _EventCardData(
-      '28',
-      'ACADEMIC',
-      '13:00 - 15:00',
-      'Pan-African Tech Summit',
-      'A keynote series featuring alumni currently shaping the African tech landscape.',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final filteredEvents = _events
-        .where((event) {
-          final query = _search.trim().toLowerCase();
-          final matchesFilter =
-              _selectedFilter == 'All' || event.category == _selectedFilter;
-          final matchesSearch =
-              query.isEmpty ||
-              event.title.toLowerCase().contains(query) ||
-              event.summary.toLowerCase().contains(query) ||
-              event.category.toLowerCase().contains(query);
-          return matchesFilter && matchesSearch;
-        })
-        .toList(growable: false);
+    final filteredEvents = MockData.events.where((event) {
+      final query = _search.trim().toLowerCase();
+      final matchesFilter = _selectedFilter == 'All' ||
+          event.category == _selectedFilter;
+      final matchesSearch = query.isEmpty ||
+          event.title.toLowerCase().contains(query) ||
+          event.description.toLowerCase().contains(query) ||
+          event.category.toLowerCase().contains(query);
+      return matchesFilter && matchesSearch;
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -119,7 +70,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               height: 36,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: const ['All', 'Events', 'Hackathons', 'Info'].length,
+                itemCount: const ['All', 'Events', 'Hackathons', 'Info']
+                    .length,
                 separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final label = const [
@@ -132,7 +84,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   return _FilterChip(
                     label: label,
                     active: active,
-                    onTap: () => setState(() => _selectedFilter = label),
+                    onTap: () =>
+                        setState(() => _selectedFilter = label),
                   );
                 },
               ),
@@ -141,15 +94,21 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             _sectionTitle('Trending Communities', 'View all'),
             const SizedBox(height: 12),
             SizedBox(
-              height: 200,
+              height: 240,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  final item = _communities[index];
-                  return _TrendingCommunityCard(data: item);
+                  final community = MockData.communities[index];
+                  return _TrendingCommunityCard(
+                    community: community,
+                    onTap: () => context.push(
+                      '/community-detail',
+                      extra: community,
+                    ),
+                  );
                 },
                 separatorBuilder: (_, __) => const SizedBox(width: 12),
-                itemCount: _communities.length,
+                itemCount: 3,
               ),
             ),
             const SizedBox(height: 20),
@@ -158,7 +117,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             ...filteredEvents.map(
               (event) => Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: _UpcomingEventCard(data: event),
+                child: _UpcomingEventCard(
+                  data: event,
+                  onTap: () => context.push('/event/${event.id}'),
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -180,14 +142,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(24),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Color(0xFF1F2A44), Color(0xFF0A1020)],
-                          ),
-                        ),
+                      child: Image.network(
+                        'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=800',
+                        fit: BoxFit.cover,
+                        opacity: const AlwaysStoppedAnimation(0.3),
                       ),
                     ),
                   ),
@@ -266,7 +224,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           style: AppTextStyles.labelLg,
                         ),
                         const SizedBox(height: 4),
-                        Text('Midnight tonight', style: AppTextStyles.caption),
+                        Text('Midnight tonight',
+                            style: AppTextStyles.caption),
                       ],
                     ),
                   ),
@@ -311,16 +270,17 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   const CircleAvatar(
                     radius: 15,
                     backgroundColor: Colors.white,
-                    child: Icon(Icons.add, color: AppColors.primary, size: 18),
+                    child: Icon(Icons.add,
+                        color: AppColors.primary, size: 18),
                   ),
                 ],
               ),
             ),
           ],
-         ),
-       ),
-     );
-   }
+        ),
+      ),
+    );
+  }
 
   Widget _sectionHeader() {
     return Row(
@@ -328,7 +288,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         const CircleAvatar(
           radius: 18,
           backgroundColor: AppColors.surfaceContainerHigh,
-          child: Icon(Icons.person, color: AppColors.textPrimary, size: 18),
+          child: Icon(Icons.person,
+              color: AppColors.textPrimary, size: 18),
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -363,21 +324,22 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 }
 
 class _FilterChip extends StatelessWidget {
+  final String label;
+  final bool active;
+  final VoidCallback onTap;
+
   const _FilterChip({
     required this.label,
     required this.active,
     required this.onTap,
   });
 
-  final String label;
-  final bool active;
-  final VoidCallback onTap;
-
   @override
   Widget build(BuildContext context) {
     return ActionChip(
       onPressed: onTap,
-      backgroundColor: active ? AppColors.primary : AppColors.surfaceContainer,
+      backgroundColor:
+          active ? AppColors.primary : AppColors.surfaceContainer,
       label: Text(
         label,
         style: AppTextStyles.labelSm.copyWith(
@@ -389,151 +351,131 @@ class _FilterChip extends StatelessWidget {
 }
 
 class _TrendingCommunityCard extends StatelessWidget {
-  const _TrendingCommunityCard({required this.data});
+  final CommunityData community;
+  final VoidCallback onTap;
 
-  final _CommunityCardData data;
+  const _TrendingCommunityCard({
+    required this.community,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 220,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF141C31), Color(0xFF0A1020)],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 220,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF141C31), Color(0xFF0A1020)],
+          ),
+          border: Border.all(color: AppColors.divider),
         ),
-        border: Border.all(color: AppColors.divider),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 118,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              gradient: const LinearGradient(
-                colors: [Color(0xFF20314F), Color(0xFF0D1424)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 118,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                image: DecorationImage(
+                  image: NetworkImage(community.bannerUrl),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            child: const Center(
-              child: Icon(Icons.phonelink, color: AppColors.primary, size: 42),
+            const SizedBox(height: 12),
+            Text(community.name, style: AppTextStyles.labelLg),
+            const SizedBox(height: 3),
+            Text(community.category, style: AppTextStyles.caption),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(community.members, style: AppTextStyles.caption),
+                TextButton(onPressed: onTap, child: const Text('Join')),
+              ],
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(data.title, style: AppTextStyles.labelLg),
-          const SizedBox(height: 3),
-          Text(data.subtitle, style: AppTextStyles.caption),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(data.members, style: AppTextStyles.caption),
-              TextButton(onPressed: () {}, child: Text(data.cta)),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class _UpcomingEventCard extends StatelessWidget {
-  const _UpcomingEventCard({required this.data});
+  final EventData data;
+  final VoidCallback onTap;
 
-  final _EventCardData data;
+  const _UpcomingEventCard({
+    required this.data,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.divider),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 54,
-            height: 54,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(16),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.divider),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 54,
+              height: 54,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    data.day,
+                    style: AppTextStyles.labelLg
+                        .copyWith(color: Colors.white),
+                  ),
+                  Text(data.month, style: AppTextStyles.caption),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  data.day,
-                  style: AppTextStyles.labelLg.copyWith(color: Colors.white),
-                ),
-                Text('JAN', style: AppTextStyles.caption),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      data.category,
-                      style: AppTextStyles.caption.copyWith(
-                        color: AppColors.primary,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        data.category,
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(data.time, style: AppTextStyles.caption),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(data.title, style: AppTextStyles.labelLg),
-                const SizedBox(height: 3),
-                Text(data.summary, style: AppTextStyles.caption),
-              ],
+                      const SizedBox(width: 8),
+                      Text(data.time, style: AppTextStyles.caption),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(data.title, style: AppTextStyles.labelLg),
+                  const SizedBox(height: 3),
+                  Text(data.description,
+                      style: AppTextStyles.caption),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-}
-
-class _CommunityCardData {
-  const _CommunityCardData(
-    this.title,
-    this.subtitle,
-    this.badge,
-    this.members,
-    this.cta,
-  );
-
-  final String title;
-  final String subtitle;
-  final String badge;
-  final String members;
-  final String cta;
-}
-
-class _EventCardData {
-  const _EventCardData(
-    this.day,
-    this.category,
-    this.time,
-    this.title,
-    this.summary,
-  );
-
-  final String day;
-  final String category;
-  final String time;
-  final String title;
-  final String summary;
 }

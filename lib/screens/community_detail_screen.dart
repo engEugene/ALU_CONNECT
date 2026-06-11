@@ -1,5 +1,4 @@
 import 'package:alu_connect/models/community_data.dart';
-import 'package:alu_connect/screens/membership_application_screen.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

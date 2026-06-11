@@ -1,6 +1,6 @@
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});

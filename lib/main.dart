@@ -1,9 +1,9 @@
+import 'package:alu_connect/data/mock_data.dart';
 import 'package:alu_connect/models/community_data.dart';
 import 'package:alu_connect/screens/community_detail_screen.dart';
 import 'package:alu_connect/screens/membership_application_screen.dart';
 import 'package:alu_connect/screens/event_details_screen.dart';
 import 'package:alu_connect/screens/discover_screen.dart';
-import 'package:alu_connect/screens/empty_tab_screen.dart';
 import 'package:alu_connect/screens/communities_explore_screen.dart';
 import 'package:alu_connect/screens/onboarding_screen.dart';
 import 'package:alu_connect/screens/chats_screen.dart';
@@ -35,7 +35,11 @@ class AluConnect extends StatelessWidget {
       GoRoute(
         path: '/event/:id',
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const EventDetailsScreen(),
+        builder: (context, state) {
+          final eventId = state.pathParameters['id']!;
+          final event = MockData.events.firstWhere((e) => e.id == eventId);
+          return EventDetailsScreen(event: event);
+        },
       ),
       GoRoute(
         path: '/community-detail',
@@ -64,7 +68,7 @@ class AluConnect extends StatelessWidget {
           ),
           GoRoute(
             path: '/add',
-            builder: (context, state) => const EmptyTabScreen(title: 'Add Event'),
+            builder: (context, state) => const CreateEventScreen(),
           ),
           GoRoute(
             path: '/chats',
@@ -72,7 +76,7 @@ class AluConnect extends StatelessWidget {
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const EmptyTabScreen(title: 'Profile'),
+            builder: (context, state) => const ProfileScreen(),
           ),
           GoRoute(
             path: '/membership',

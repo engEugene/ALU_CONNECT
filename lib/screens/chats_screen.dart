@@ -1,69 +1,7 @@
+import 'package:alu_connect/data/mock_data.dart';
 import 'package:alu_connect/screens/group_chat_screen.dart';
 import 'package:alu_connect/theme/index.dart';
 import 'package:flutter/material.dart';
-
-class _Chat {
-  const _Chat({
-    required this.name,
-    required this.preview,
-    required this.time,
-    this.unread = 0,
-    this.hasOnline = false,
-    this.isItalic = false,
-    required this.avatarColor,
-    required this.avatarIcon,
-  });
-
-  final String name;
-  final String preview;
-  final String time;
-  final int unread;
-  final bool hasOnline;
-  final bool isItalic;
-  final Color avatarColor;
-  final IconData avatarIcon;
-}
-
-const _chats = [
-  _Chat(
-    name: 'ALU Tech Society',
-    preview: "David: Don't forget the hackathon starts in 2 hours!",
-    time: '10:24 AM',
-    unread: 12,
-    avatarColor: Color(0xFF1A2A4A),
-    avatarIcon: Icons.computer,
-  ),
-  _Chat(
-    name: 'Gala Night Committee',
-    preview: 'Sarah sent a photo',
-    time: 'Yesterday',
-    hasOnline: true,
-    isItalic: true,
-    avatarColor: Color(0xFF3A1A10),
-    avatarIcon: Icons.local_fire_department,
-  ),
-  _Chat(
-    name: 'Sarah Chen',
-    preview: 'Did you finish the research proposal for Dr. Ndlovu?',
-    time: '2:15 PM',
-    avatarColor: Color(0xFF4A1A2A),
-    avatarIcon: Icons.person,
-  ),
-  _Chat(
-    name: 'Marcus Tetteh',
-    preview: 'Check out this new internship opportunity I found on LinkedIn!',
-    time: 'Monday',
-    avatarColor: Color(0xFF1A1A3A),
-    avatarIcon: Icons.person,
-  ),
-  _Chat(
-    name: 'Nia Zuri',
-    preview: 'Thanks for the help with the CS lab! You saved my grade.',
-    time: 'Sunday',
-    avatarColor: Color(0xFF2A1A3A),
-    avatarIcon: Icons.person,
-  ),
-];
 
 class ChatsScreen extends StatefulWidget {
   const ChatsScreen({super.key});
@@ -78,6 +16,8 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final chats = MockData.chats;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('ALU Connect'),
@@ -99,13 +39,15 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 Text('Messages', style: AppTextStyles.headingLg),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
+                  icon: const Icon(Icons.edit_outlined,
+                      color: AppColors.primary),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search chats, groups, or clubs...',
@@ -113,10 +55,12 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 filled: true,
                 fillColor: AppColors.surfaceContainer,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+                  borderRadius:
+                      BorderRadius.circular(AppTheme.radiusFull),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 12),
               ),
             ),
           ),
@@ -133,15 +77,21 @@ class _ChatsScreenState extends State<ChatsScreen> {
                   onTap: () => setState(() => _filterIndex = i),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 180),
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 8),
                     decoration: BoxDecoration(
-                      color: selected ? AppColors.primary : AppColors.surfaceContainer,
-                      borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+                      color: selected
+                          ? AppColors.primary
+                          : AppColors.surfaceContainer,
+                      borderRadius:
+                          BorderRadius.circular(AppTheme.radiusFull),
                     ),
                     child: Text(
                       _filters[i],
                       style: AppTextStyles.labelSm.copyWith(
-                        color: selected ? Colors.white : AppColors.textPrimary,
+                        color: selected
+                            ? Colors.white
+                            : AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -152,8 +102,9 @@ class _ChatsScreenState extends State<ChatsScreen> {
           const SizedBox(height: 12),
           Expanded(
             child: ListView.builder(
-              itemCount: _chats.length,
-              itemBuilder: (context, i) => _ChatTile(chat: _chats[i]),
+              itemCount: chats.length,
+              itemBuilder: (context, i) =>
+                  _ChatTile(chat: chats[i]),
             ),
           ),
         ],
@@ -163,18 +114,20 @@ class _ChatsScreenState extends State<ChatsScreen> {
 }
 
 class _ChatTile extends StatelessWidget {
+  final ChatData chat;
   const _ChatTile({required this.chat});
-
-  final _Chat chat;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const GroupChatScreen()),
+        MaterialPageRoute(
+          builder: (_) => GroupChatScreen(chatName: chat.name),
+        ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           children: [
             Stack(
@@ -182,7 +135,8 @@ class _ChatTile extends StatelessWidget {
                 CircleAvatar(
                   radius: 26,
                   backgroundColor: chat.avatarColor,
-                  child: Icon(chat.avatarIcon, color: Colors.white, size: 22),
+                  child: Icon(chat.avatarIcon,
+                      color: Colors.white, size: 22),
                 ),
                 if (chat.hasOnline)
                   Positioned(
@@ -194,7 +148,8 @@ class _ChatTile extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.success,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.background, width: 2),
+                        border: Border.all(
+                            color: AppColors.background, width: 2),
                       ),
                     ),
                   ),
@@ -206,10 +161,13 @@ class _ChatTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment:
+                        MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(chat.name, style: AppTextStyles.labelLg),
-                      Text(chat.time, style: AppTextStyles.caption),
+                      Text(chat.name,
+                          style: AppTextStyles.labelLg),
+                      Text(chat.time,
+                          style: AppTextStyles.caption),
                     ],
                   ),
                   const SizedBox(height: 3),
@@ -218,7 +176,9 @@ class _ChatTile extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.caption.copyWith(
-                      fontStyle: chat.isItalic ? FontStyle.italic : FontStyle.normal,
+                      fontStyle: chat.isItalic
+                          ? FontStyle.italic
+                          : FontStyle.normal,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -228,14 +188,19 @@ class _ChatTile extends StatelessWidget {
             if (chat.unread > 0) ...[
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 7, vertical: 3),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+                  borderRadius:
+                      BorderRadius.circular(AppTheme.radiusFull),
                 ),
                 child: Text(
                   '${chat.unread}',
-                  style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                      fontSize: 11,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700),
                 ),
               ),
             ] else if (chat.hasOnline) ...[
@@ -243,7 +208,9 @@ class _ChatTile extends StatelessWidget {
               Container(
                 width: 10,
                 height: 10,
-                decoration: const BoxDecoration(color: AppColors.error, shape: BoxShape.circle),
+                decoration: const BoxDecoration(
+                    color: AppColors.error,
+                    shape: BoxShape.circle),
               ),
             ],
           ],
